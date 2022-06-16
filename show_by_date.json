@@ -1,0 +1,556 @@
+{
+	"success": true,
+	"total_entries": 1,
+	"total_pages": 1,
+	"page": 1,
+	"data": {
+		"id": 2052,
+		"date": "2021-08-31",
+		"duration": 11205277,
+		"incomplete": false,
+		"sbd": false,
+		"remastered": false,
+		"tags": [],
+		"tour_id": 111,
+		"venue": {
+			"id": 605,
+			"slug": "shoreline-amphitheatre",
+			"name": "Shoreline Amphitheatre",
+			"other_names": [],
+			"latitude": 37.42326,
+			"longitude": -122.085638,
+			"shows_count": 16,
+			"location": "Mountain View, CA",
+			"updated_at": "2013-03-24T01:18:12Z"
+		},
+		"venue_name": "Shoreline Amphitheatre",
+		"taper_notes": "Phish\nShoreline Amphitheatre\nMountain View, California\n8/31/2021\n\nSource: Schoeps CCM4V'S\u003eLunatec V2\u003eSound Devices 722 (24/44.1)\nBOB/DFC/KFC/ZFC/AARP Section 202, Row D, Seat 23, 6 1/2' High\nDSP: Sound Devices 722\u003eSound Forge 10.0\u003eCD Wave\u003eflac(16)\nID3 Tagged In Foobar 2000\nRecorded By: Z-Man\nSeeded By: Z-Man\nA Team Dirty South Recording\n\nDisc I 1st Set\n\n01 Glide\n02 Colonel Forbin's Ascent \u003e\n03 Fly Famous Mockingbird\n04 Trey Banter\n05 Wolfman's Brother\n06 If I Could\n07 I Never Needed You This Bad\n08 Stash\n09 Weigh\n10 Bouncin' Around The Room \u003e\n11 Gotta Jibboo\n12 Moonage Daydream\n\nDisc II 2nd Set\n\n01 Soul Planet \u003e\n02 The Final Hurrah \u003e\n03 Theme From The Bottom\n04 Axilla (Part II)\n05 Tela \u003e\n06 Harry Hood\nEncore:\n07 *Fee\n08 Wilson\n\n* With Trey On Megaphone\n",
+		"likes_count": 9,
+		"tracks": [
+			{
+				"id": 34867,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Glide",
+				"position": 1,
+				"duration": 266762,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 4,
+				"slug": "glide",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/867/34867.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/867/34867.png",
+				"song_ids": [
+					296
+				],
+				"updated_at": "2021-09-01T19:31:43Z"
+			},
+			{
+				"id": 34868,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Colonel Forbin's Ascent",
+				"position": 2,
+				"duration": 467409,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 5,
+				"slug": "colonel-forbins-ascent",
+				"tags": [
+					{
+						"id": 16,
+						"name": "Narration",
+						"priority": 14,
+						"group": "Spoken Word",
+						"color": "#888888",
+						"notes": "Brief Mockingbird intro",
+						"transcript": "TREY: flying, appearing out of the clouds, a tiny tiny pin speck of black fluttering its wings towards us now from on top of the mountain. It's the Famous Mockingbird.",
+						"starts_at_second": 368,
+						"ends_at_second": null
+					}
+				],
+				"mp3": "https://phish.in/audio/000/034/868/34868.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/868/34868.png",
+				"song_ids": [
+					161
+				],
+				"updated_at": "2021-09-01T19:32:00Z"
+			},
+			{
+				"id": 34869,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Fly Famous Mockingbird",
+				"position": 3,
+				"duration": 367543,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 5,
+				"slug": "fly-famous-mockingbird",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/869/34869.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/869/34869.png",
+				"song_ids": [
+					265
+				],
+				"updated_at": "2021-09-01T19:32:13Z"
+			},
+			{
+				"id": 34871,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Banter",
+				"position": 4,
+				"duration": 77192,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 1,
+				"slug": "banter",
+				"tags": [
+					{
+						"id": 19,
+						"name": "Banter",
+						"priority": 17,
+						"group": "Spoken Word",
+						"color": "#888888",
+						"notes": "Trey talks about the Lake Tahoe fire",
+						"transcript": "TREY: Thank you everybody for being here, thank you. I just want to send, before we keep going here and get the show rolling along here, I just want to send an incredible amount of love to everyone in Lake Tahoe that's been affected by the Caldor fire and um, especially a message of love to firefighters and emergency personnel, families, we are, we're all thinking of everyone there and I also want to thank our friends at Another Planet and everybody at Live Nation and everybody on the Phish crew and Phish team who made this leap to one of our all time favorite venues, we're really excited to be here, so, it was a Herculean, Herculean - is that right, Page?\nFISH: Herculean\nTREY: It was a Herculean effort, Herculean\nPAGE: It was almost Sisyphian\nFISH: Sisyphian [laughs]\nTREY: Anyway, last but not least, we want to thank all of you for being here with us right now, thank you.",
+						"starts_at_second": null,
+						"ends_at_second": null
+					}
+				],
+				"mp3": "https://phish.in/audio/000/034/871/34871.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/871/34871.png",
+				"song_ids": [
+					886
+				],
+				"updated_at": "2021-09-01T19:32:41Z"
+			},
+			{
+				"id": 34870,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Wolfman's Brother",
+				"position": 5,
+				"duration": 691252,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 4,
+				"slug": "wolfmans-brother",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/870/34870.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/870/34870.png",
+				"song_ids": [
+					870
+				],
+				"updated_at": "2021-09-01T19:32:38Z"
+			},
+			{
+				"id": 34872,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "If I Could",
+				"position": 6,
+				"duration": 438570,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 5,
+				"slug": "if-i-could",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/872/34872.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/872/34872.png",
+				"song_ids": [
+					389
+				],
+				"updated_at": "2021-09-01T19:32:56Z"
+			},
+			{
+				"id": 34873,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "I Never Needed You Like This Before",
+				"position": 7,
+				"duration": 380891,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 4,
+				"slug": "i-never-needed-you-like-this-before",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/873/34873.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/873/34873.png",
+				"song_ids": [
+					1050
+				],
+				"updated_at": "2021-09-01T19:33:10Z"
+			},
+			{
+				"id": 34874,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Stash",
+				"position": 8,
+				"duration": 1071203,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 13,
+				"slug": "stash",
+				"tags": [
+					{
+						"id": 4,
+						"name": "Jamcharts",
+						"priority": 4,
+						"group": "Curated Selections",
+						"color": "#888888",
+						"notes": "Mike, Trey, and Page layer in an array of textures and tones as they cycle through their respective palettes in this tremendous jam that sees each member trade lead and complementary roles with frequency. Retains at least a loose sense of \"Stash\" for the duration but explores widely within that tense Latin-esque minor zone heard in previous standout versions (8/11/18, 7/10/19).",
+						"transcript": null,
+						"starts_at_second": null,
+						"ends_at_second": null
+					},
+					{
+						"id": 17,
+						"name": "Tease",
+						"priority": 15,
+						"group": "Song Content",
+						"color": "#888888",
+						"notes": "In Memory of Elizabeth Reed by The Allman Brothers Band",
+						"transcript": null,
+						"starts_at_second": null,
+						"ends_at_second": null
+					}
+				],
+				"mp3": "https://phish.in/audio/000/034/874/34874.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/874/34874.png",
+				"song_ids": [
+					728
+				],
+				"updated_at": "2021-09-01T19:33:48Z"
+			},
+			{
+				"id": 34875,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Weigh",
+				"position": 9,
+				"duration": 331389,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 5,
+				"slug": "weigh",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/875/34875.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/875/34875.png",
+				"song_ids": [
+					838
+				],
+				"updated_at": "2021-09-01T19:34:00Z"
+			},
+			{
+				"id": 34876,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Bouncing Around the Room",
+				"position": 10,
+				"duration": 205453,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 2,
+				"slug": "bouncing-around-the-room",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/876/34876.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/876/34876.png",
+				"song_ids": [
+					111
+				],
+				"updated_at": "2021-09-01T19:34:07Z"
+			},
+			{
+				"id": 34877,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Gotta Jibboo",
+				"position": 11,
+				"duration": 466364,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 3,
+				"slug": "gotta-jibboo",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/877/34877.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/877/34877.png",
+				"song_ids": [
+					308
+				],
+				"updated_at": "2021-09-01T19:34:24Z"
+			},
+			{
+				"id": 34878,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Moonage Daydream",
+				"position": 12,
+				"duration": 444291,
+				"jam_starts_at_second": null,
+				"set": "1",
+				"set_name": "Set 1",
+				"likes_count": 7,
+				"slug": "moonage-daydream",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/878/34878.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/878/34878.png",
+				"song_ids": [
+					969
+				],
+				"updated_at": "2021-09-01T19:34:40Z"
+			},
+			{
+				"id": 34879,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Soul Planet",
+				"position": 13,
+				"duration": 2809940,
+				"jam_starts_at_second": null,
+				"set": "2",
+				"set_name": "Set 2",
+				"likes_count": 22,
+				"slug": "soul-planet",
+				"tags": [
+					{
+						"id": 4,
+						"name": "Jamcharts",
+						"priority": 4,
+						"group": "Curated Selections",
+						"color": "#888888",
+						"notes": "Smoothly runs the gamut from dark grooves to a lovely uplifting space to double-time rocking out to a muscular jamming zone where Mike's drill (!) takes center stage to anthemic bliss to something akin to an alien distress signal that could've only come from Summer 2021 to sludgy industrial noise to even faster rocking out to snappy funkiness to a perfect -\u0026gt; into \"The Final Hurrah\". A cornerstone jam of Summer 2021, and the third longest of their entire career. Yes, you read that right, their entire career.",
+						"transcript": null,
+						"starts_at_second": null,
+						"ends_at_second": null
+					}
+				],
+				"mp3": "https://phish.in/audio/000/034/879/34879.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/879/34879.png",
+				"song_ids": [
+					1010
+				],
+				"updated_at": "2021-09-01T19:36:02Z"
+			},
+			{
+				"id": 34880,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "The Final Hurrah",
+				"position": 14,
+				"duration": 503641,
+				"jam_starts_at_second": null,
+				"set": "2",
+				"set_name": "Set 2",
+				"likes_count": 6,
+				"slug": "the-final-hurrah",
+				"tags": [
+					{
+						"id": 4,
+						"name": "Jamcharts",
+						"priority": 4,
+						"group": "Curated Selections",
+						"color": "#888888",
+						"notes": "How to follow Shoreline's epic \"Soul Planet\"? By -\u0026gt; into a new Trey favorite, KV's classic \"The Final Hurrah.\" Dancing around a wonderful groove by means of his envelope filter, Trey's improvisation is at turns melodic and jazzy, inciting an impossibly cool jam and fitting end to one of the band's most impressive cosmic journeys.",
+						"transcript": null,
+						"starts_at_second": null,
+						"ends_at_second": null
+					}
+				],
+				"mp3": "https://phish.in/audio/000/034/880/34880.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/880/34880.png",
+				"song_ids": [
+					1019
+				],
+				"updated_at": "2021-09-01T19:36:20Z"
+			},
+			{
+				"id": 34881,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Theme From the Bottom",
+				"position": 15,
+				"duration": 513306,
+				"jam_starts_at_second": null,
+				"set": "2",
+				"set_name": "Set 2",
+				"likes_count": 3,
+				"slug": "theme-from-the-bottom",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/881/34881.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/881/34881.png",
+				"song_ids": [
+					770
+				],
+				"updated_at": "2021-09-01T19:36:39Z"
+			},
+			{
+				"id": 34882,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Axilla (Part II)",
+				"position": 16,
+				"duration": 264490,
+				"jam_starts_at_second": null,
+				"set": "2",
+				"set_name": "Set 2",
+				"likes_count": 3,
+				"slug": "axilla-part-ii",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/882/34882.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/882/34882.png",
+				"song_ids": [
+					54
+				],
+				"updated_at": "2021-09-01T19:36:49Z"
+			},
+			{
+				"id": 34883,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Tela",
+				"position": 17,
+				"duration": 412787,
+				"jam_starts_at_second": null,
+				"set": "2",
+				"set_name": "Set 2",
+				"likes_count": 3,
+				"slug": "tela",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/883/34883.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/883/34883.png",
+				"song_ids": [
+					760
+				],
+				"updated_at": "2021-09-01T19:37:03Z"
+			},
+			{
+				"id": 34884,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Harry Hood",
+				"position": 18,
+				"duration": 860395,
+				"jam_starts_at_second": null,
+				"set": "2",
+				"set_name": "Set 2",
+				"likes_count": 4,
+				"slug": "harry-hood",
+				"tags": [
+					{
+						"id": 12,
+						"name": "Alt Lyric",
+						"priority": 10,
+						"group": "Song Content",
+						"color": "#888888",
+						"notes": "Fish: Lee \"Scratch\" Perry",
+						"transcript": null,
+						"starts_at_second": null,
+						"ends_at_second": null
+					}
+				],
+				"mp3": "https://phish.in/audio/000/034/884/34884.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/884/34884.png",
+				"song_ids": [
+					330
+				],
+				"updated_at": "2021-09-01T19:37:34Z"
+			},
+			{
+				"id": 34885,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Fee",
+				"position": 19,
+				"duration": 326296,
+				"jam_starts_at_second": null,
+				"set": "E",
+				"set_name": "Encore",
+				"likes_count": 1,
+				"slug": "fee",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/885/34885.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/885/34885.png",
+				"song_ids": [
+					248
+				],
+				"updated_at": "2021-09-01T19:37:46Z"
+			},
+			{
+				"id": 34886,
+				"show_id": 2052,
+				"show_date": "2021-08-31",
+				"venue_name": "Shoreline Amphitheatre",
+				"venue_location": "Mountain View, CA",
+				"title": "Wilson",
+				"position": 20,
+				"duration": 306103,
+				"jam_starts_at_second": null,
+				"set": "E",
+				"set_name": "Encore",
+				"likes_count": 2,
+				"slug": "wilson",
+				"tags": [],
+				"mp3": "https://phish.in/audio/000/034/886/34886.mp3",
+				"waveform_image": "https://phish.in/audio/000/034/886/34886.png",
+				"song_ids": [
+					864
+				],
+				"updated_at": "2021-09-01T19:37:57Z"
+			}
+		],
+		"updated_at": "2021-09-01T19:37:57Z"
+	}
+}
