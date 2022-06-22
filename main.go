@@ -36,21 +36,29 @@ func main() {
 			return
 		}
 
-		date, err := parseCommand(m.Content)
-		if err != nil || date == nil {
+		command, args, err := parseCommand(m.Content)
+		if err != nil || command == UnknownCommand {
 			return
 		}
 
-		show, err := phish.ShowOnDate(context.Background(), *date)
-		if err != nil || show.Data.ID == 0 {
-			return
-		}
+		switch command {
+		case SetlistCommand:
+			date, ok := args.(time.Time)
+			if !ok {
+				return
+			}
 
-		embed, err := embedForSetlist(setlistForShow(show.Data))
-		if err != nil {
-			return
+			show, err := phish.ShowOnDate(context.Background(), date)
+			if err != nil || show.Data.ID == 0 {
+				return
+			}
+
+			embed, err := embedForSetlist(setlistForShow(show.Data))
+			if err != nil {
+				return
+			}
+			s.ChannelMessageSendEmbed(m.ChannelID, &embed)
 		}
-		s.ChannelMessageSendEmbed(m.ChannelID, &embed)
 	}
 
 	dg.AddHandler(messageCreate)
@@ -73,6 +81,14 @@ func main() {
 	dg.Close()
 }
 
+type Command int
+
+const (
+	SetlistCommand Command = iota
+	LastPlayedCommand
+	UnknownCommand
+)
+
 // Colors: https://gist.github.com/thomasbnt/b6f455e2c7d743b796917fa3c205f812
 const green int = 5763719
 
@@ -85,23 +101,23 @@ func getEnv(key string) string {
 	return val
 }
 
-func parseCommand(s string) (*time.Time, error) {
+func parseCommand(s string) (Command, interface{}, error) {
 	r := regexp.MustCompile(`\.(setlist)\s+(.*)$`)
 	match := r.FindStringSubmatch(s)
 
 	if len(match) != 3 {
-		return nil, nil
+		return UnknownCommand, nil, nil
 	}
 
 	if match[1] == "setlist" {
 		t, err := dateparse.ParseAny(match[2])
 		if err != nil {
-			return nil, err
+			return UnknownCommand, nil, err
 		}
-		return &t, nil
+		return SetlistCommand, t, nil
 	}
 
-	return nil, nil
+	return UnknownCommand, nil, nil
 }
 
 func date(year int, month time.Month, day int) time.Time {

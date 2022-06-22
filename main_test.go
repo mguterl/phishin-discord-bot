@@ -124,22 +124,11 @@ func TestSetlist(t *testing.T) {
 	}, setlist.Sets)
 }
 
-// Time returns a pointer value for the time.Time value passed in.
-func Time(v time.Time) *time.Time {
-	return &v
-}
-
-func tParseCommand(t *testing.T, s string) *time.Time {
-	d, err := parseCommand(s)
-	require.NoError(t, err)
-	return d
-}
-
 func TestParseCommand(t *testing.T) {
-	assert.Equal(t, Time(date(2021, 8, 31)), tParseCommand(t, ".setlist 2021-08-31"))
-	assert.Equal(t, Time(date(2021, 8, 31)), tParseCommand(t, ".setlist 8/31/2021"))
-	assert.Equal(t, Time(date(2021, 8, 31)), tParseCommand(t, ".setlist 8/31/21"))
-
-	_, err := parseCommand(".setlist 42")
-	require.Error(t, err)
+	command, args, err := parseCommand(".setlist 8/31/21")
+	require.NoError(t, err)
+	assert.Equal(t, SetlistCommand, command)
+	d, ok := args.(time.Time)
+	require.True(t, ok)
+	assert.Equal(t, date(2021, 8, 31), d)
 }
