@@ -17,13 +17,10 @@ import (
 	"github.com/mguterl/phishin-discord-bot/phishin"
 )
 
-// Colors: https://gist.github.com/thomasbnt/b6f455e2c7d743b796917fa3c205f812
-const green int = 5763719
-
 func main() {
 	godotenv.Load()
-	discordToken := os.Getenv("DISCORD_TOKEN")
-	phishinToken := os.Getenv("PHISHIN_TOKEN")
+	discordToken := getEnv("DISCORD_TOKEN")
+	phishinToken := getEnv("PHISHIN_TOKEN")
 
 	dg, err := discordgo.New("Bot " + discordToken)
 	if err != nil {
@@ -74,6 +71,18 @@ func main() {
 
 	// Cleanly close down the Discord session.
 	dg.Close()
+}
+
+// Colors: https://gist.github.com/thomasbnt/b6f455e2c7d743b796917fa3c205f812
+const green int = 5763719
+
+func getEnv(key string) string {
+	val, ok := os.LookupEnv(key)
+	if !ok || len(val) == 0 {
+		fmt.Println("could not find key in env:", key)
+		os.Exit(1)
+	}
+	return val
 }
 
 func parseCommand(s string) (*time.Time, error) {
