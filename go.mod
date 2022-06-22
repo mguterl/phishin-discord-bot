@@ -3,6 +3,7 @@ module github.com/mguterl/phishin-discord-bot
 go 1.18
 
 require (
+	github.com/araddon/dateparse v0.0.0-20210429162001-6b43995a97de // indirect
 	github.com/bwmarrin/discordgo v0.25.0 // indirect
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
