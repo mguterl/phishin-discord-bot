@@ -37,5 +37,5 @@ func TestLastPlayed(t *testing.T) {
 	assert.Equal(t, "Black-Eyed Katy", last.Title)
 	require.Len(t, last.Shows, 4)
 	mostRecent := last.Shows[len(last.Shows)-1]
-	assert.Equal(t, DateFromString("1997-12-30"), mostRecent.Date) // TODO: custom JSON unmarshal for dates
+	assert.Equal(t, DateFromString("1997-12-30"), mostRecent.Date)
 }
