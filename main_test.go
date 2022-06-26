@@ -16,9 +16,9 @@ func parseDuration(t *testing.T, s string) time.Duration {
 	return duration
 }
 
-func TestSetlistResponse(t *testing.T) {
+func TestSetlistEmbed(t *testing.T) {
 	setlist := Setlist{
-		Date:     parseDate("2021-08-31"),
+		Date:     phishin.DateFromString("2021-08-31"),
 		Venue:    "Shoreline Amphitheatre",
 		Location: "Mountain View, CA",
 		Duration: parseDuration(t, "3h6m45s"),
@@ -62,11 +62,52 @@ https://phish.in/2021-08-31
 	}, embed)
 }
 
+func TestLastPlayedEmbed(t *testing.T) {
+	lastPlayed := phishin.LastPlayed{
+		Title: "Black-Eyed Katy",
+		Shows: []phishin.Show{
+			{
+				Date: phishin.DateFromString("1997-11-28"),
+				Venue: phishin.Venue{
+					Name:     "The Centrum",
+					Location: "Worcester, MA",
+				},
+			},
+			{
+				Date: phishin.DateFromString("1997-12-05"),
+				Venue: phishin.Venue{
+					Name:     "CSU Convocation Center",
+					Location: "Cleveland, OH",
+				},
+			},
+			{
+				Date: phishin.DateFromString("1997-12-30"),
+				Venue: phishin.Venue{
+					Name:     "Madison Square Garden",
+					Location: "New York, NY",
+				},
+			},
+		},
+	}
+	embed, err := embedForLastPlayed(lastPlayed)
+	require.NoError(t, err)
+	assert.Equal(t, discordgo.MessageEmbed{
+		Color: green,
+		Title: "Black-Eyed Katy was last played on Tuesday, December 30, 1997",
+		Description: `It was played at Madison Square Garden in New York, NY
+
+Next most recent plays 🌸:
+🌵 Friday, December 5, 1997 at CSU Convocation Center in Cleveland, OH
+🌵 Friday, November 28, 1997 at The Centrum in Worcester, MA
+`,
+	}, embed)
+}
+
 func TestSetlist(t *testing.T) {
 	var hourInMillis int = 3.6e+6 // 1 hour in millis
 
 	show := phishin.Show{
-		Date: "2021-08-31",
+		Date: phishin.DateFromString("2021-08-31"),
 		Venue: phishin.Venue{
 			Name:     "Shoreline Amphitheatre",
 			Location: "Mountain View, CA",
@@ -101,7 +142,7 @@ func TestSetlist(t *testing.T) {
 		},
 	}
 	setlist := setlistForShow(show)
-	assert.Equal(t, time.Date(2021, 8, 31, 0, 0, 0, 0, time.UTC), setlist.Date)
+	assert.Equal(t, phishin.DateFromString("2021-08-31"), setlist.Date)
 	assert.Equal(t, "Shoreline Amphitheatre", setlist.Venue)
 	assert.Equal(t, "Mountain View, CA", setlist.Location)
 	assert.Equal(t, 1*time.Hour, setlist.Duration)

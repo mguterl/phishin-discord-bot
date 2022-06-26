@@ -53,7 +53,24 @@ func main() {
 				return
 			}
 
-			embed, err := embedForSetlist(setlistForShow(show.Data))
+			setlist := setlistForShow(show.Data)
+			embed, err := embedForSetlist(setlist)
+			if err != nil {
+				return
+			}
+			s.ChannelMessageSendEmbed(m.ChannelID, &embed)
+		case LastPlayedCommand:
+			title, ok := args.(string)
+			if !ok {
+				return
+			}
+
+			lastPlayed, err := phish.LastPlayed(context.Background(), title, 4)
+			if err != nil {
+				return
+			}
+
+			embed, err := embedForLastPlayed(lastPlayed)
 			if err != nil {
 				return
 			}
@@ -102,19 +119,22 @@ func getEnv(key string) string {
 }
 
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(setlist)\s+(.*)$`)
+	r := regexp.MustCompile(`\.(setlist|lastplayed)\s+(.*)$`)
 	match := r.FindStringSubmatch(s)
 
 	if len(match) != 3 {
 		return UnknownCommand, nil, nil
 	}
 
-	if match[1] == "setlist" {
+	switch match[1] {
+	case "setlist":
 		t, err := dateparse.ParseAny(match[2])
 		if err != nil {
 			return UnknownCommand, nil, err
 		}
 		return SetlistCommand, t, nil
+	case "lastplayed":
+		return LastPlayedCommand, match[2], nil
 	}
 
 	return UnknownCommand, nil, nil
@@ -122,14 +142,6 @@ func parseCommand(s string) (Command, interface{}, error) {
 
 func date(year int, month time.Month, day int) time.Time {
 	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
-}
-
-func parseDate(s string) time.Time {
-	t, err := time.Parse("2006-01-02", s)
-	if err != nil {
-		return time.Time{}
-	}
-	return t
 }
 
 func formatDate(t time.Time) string {
@@ -150,7 +162,7 @@ func duration(millis int) time.Duration {
 }
 
 type Setlist struct {
-	Date     time.Time
+	Date     phishin.Date
 	Venue    string
 	Location string
 	Duration time.Duration
@@ -180,7 +192,7 @@ func setlistForShow(show phishin.Show) Setlist {
 	sets = append(sets, set)
 
 	return Setlist{
-		Date:     parseDate(show.Date),
+		Date:     show.Date,
 		Venue:    show.Venue.Name,
 		Location: show.Venue.Location,
 		Duration: duration(show.Duration),
@@ -205,10 +217,28 @@ func embedForSetlist(setlist Setlist) (discordgo.MessageEmbed, error) {
 
 	return discordgo.MessageEmbed{
 		Color:       green,
-		Title:       fmt.Sprintf("Setlist for %s @ %s in %s", formatDate(setlist.Date), setlist.Venue, setlist.Location),
+		Title:       fmt.Sprintf("Setlist for %s @ %s in %s", formatDate(setlist.Date.Time), setlist.Venue, setlist.Location),
 		Description: d.String(),
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: fmt.Sprintf("Total set duration: %s", formatDuration(setlist.Duration)),
 		},
+	}, nil
+}
+
+func embedForLastPlayed(lastPlayed phishin.LastPlayed) (discordgo.MessageEmbed, error) {
+	var d bytes.Buffer
+	last, rest := lastPlayed.Shows[len(lastPlayed.Shows)-1], lastPlayed.Shows[:len(lastPlayed.Shows)-1]
+
+	d.WriteString(fmt.Sprintf("It was played at %s in %s\n\n", last.Venue.Name, last.Venue.Location))
+	d.WriteString("Next most recent plays 🌸:\n")
+	for i := len(rest) - 1; i >= 0; i-- {
+		show := rest[i]
+		d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", show.Date.Format("Monday, January 2, 2006"), show.Venue.Name, show.Venue.Location))
+	}
+
+	return discordgo.MessageEmbed{
+		Color:       green,
+		Title:       fmt.Sprintf("%s was last played on %s", lastPlayed.Title, last.Date.Format("Monday, January 2, 2006")),
+		Description: d.String(),
 	}, nil
 }
