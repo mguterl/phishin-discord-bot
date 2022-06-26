@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"math"
@@ -198,47 +197,4 @@ func setlistForShow(show phishin.Show) Setlist {
 		Duration: duration(show.Duration),
 		Sets:     sets,
 	}
-}
-
-func embedForSetlist(setlist Setlist) (discordgo.MessageEmbed, error) {
-	var d bytes.Buffer
-	for _, set := range setlist.Sets {
-		d.WriteString(fmt.Sprintf("🔥 __%s__ (%s)\n", set.Name, formatDuration(set.Duration)))
-
-		for i, song := range set.Songs {
-			d.WriteString(fmt.Sprintf("**%d.** %s", i+1, song))
-			if i != len(set.Songs)-1 {
-				d.WriteString(" ")
-			}
-		}
-		d.WriteString("\n\n")
-	}
-	d.WriteString(fmt.Sprintf("https://phish.in/%s\n", setlist.Date.Format("2006-01-02")))
-
-	return discordgo.MessageEmbed{
-		Color:       green,
-		Title:       fmt.Sprintf("Setlist for %s @ %s in %s", formatDate(setlist.Date.Time), setlist.Venue, setlist.Location),
-		Description: d.String(),
-		Footer: &discordgo.MessageEmbedFooter{
-			Text: fmt.Sprintf("Total set duration: %s", formatDuration(setlist.Duration)),
-		},
-	}, nil
-}
-
-func embedForLastPlayed(lastPlayed phishin.LastPlayed) (discordgo.MessageEmbed, error) {
-	var d bytes.Buffer
-	last, rest := lastPlayed.Shows[len(lastPlayed.Shows)-1], lastPlayed.Shows[:len(lastPlayed.Shows)-1]
-
-	d.WriteString(fmt.Sprintf("It was played at %s in %s\n\n", last.Venue.Name, last.Venue.Location))
-	d.WriteString("Next most recent plays 🌸:\n")
-	for i := len(rest) - 1; i >= 0; i-- {
-		show := rest[i]
-		d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", show.Date.Format("Monday, January 2, 2006"), show.Venue.Name, show.Venue.Location))
-	}
-
-	return discordgo.MessageEmbed{
-		Color:       green,
-		Title:       fmt.Sprintf("%s was last played on %s", lastPlayed.Title, last.Date.Format("Monday, January 2, 2006")),
-		Description: d.String(),
-	}, nil
 }
