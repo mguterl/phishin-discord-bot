@@ -38,6 +38,7 @@ func TestLastPlayed(t *testing.T) {
 	require.Len(t, last.Shows, 4)
 	mostRecent := last.Shows[len(last.Shows)-1]
 	assert.Equal(t, DateFromString("1997-12-30"), mostRecent.Date)
+	assert.Equal(t, "https://phish.in/black-eyed-katy", last.URL)
 }
 
 func TestLastPlayedMultipleSameShow(t *testing.T) {
@@ -49,4 +50,5 @@ func TestLastPlayedMultipleSameShow(t *testing.T) {
 	require.Len(t, last.Shows, 3)
 	first := last.Shows[0]
 	assert.Equal(t, DateFromString("1993-02-19"), first.Date)
+	assert.Equal(t, "https://phish.in/moby-dick", last.URL)
 }

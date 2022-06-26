@@ -9,7 +9,8 @@ import (
 	"time"
 )
 
-const baseUrl = "http://phish.in/api/v1"
+const baseApiUrl = "http://phish.in/api/v1"
+const baseURL = "https://phish.in"
 
 type Client struct {
 	token string
@@ -99,6 +100,10 @@ type Song struct {
 	Tracks      []SongTrack `json:"tracks"`
 }
 
+func (s Song) URL() string {
+	return fmt.Sprintf("%s/%s", baseURL, s.Slug)
+}
+
 type SongTrack struct {
 	ID         int    `json:"id"`
 	Title      string `json:"title"`
@@ -142,7 +147,7 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 
 func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowOnDate, error) {
 	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
-	url := fmt.Sprintf("%s/%s/%s", baseUrl, "show-on-date", date)
+	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
@@ -167,6 +172,7 @@ func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowOnDate, error)
 
 type LastPlayed struct {
 	Title string
+	URL   string
 	Shows []Show
 }
 
@@ -177,6 +183,7 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 	}
 	lastPlayed := LastPlayed{
 		Title: song.Data.Title,
+		URL:   song.Data.URL(),
 	}
 
 	// A song may appear multiple times for a single show, but we only want to
@@ -209,7 +216,7 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 
 func (c Client) SongByTitle(ctx context.Context, title string) (SongByTitle, error) {
 	slug := slugify(title)
-	url := fmt.Sprintf("%s/%s/%s", baseUrl, "songs", slug)
+	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "songs", slug)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {

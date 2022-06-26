@@ -58,6 +58,7 @@ https://phish.in/2021-08-31
 func TestLastPlayedEmbed(t *testing.T) {
 	lastPlayed := phishin.LastPlayed{
 		Title: "Black-Eyed Katy",
+		URL:   "https://phish.in/black-eyed-katy",
 		Shows: []phishin.Show{
 			{
 				Date: phishin.DateFromString("1997-11-28"),
@@ -92,6 +93,8 @@ func TestLastPlayedEmbed(t *testing.T) {
 Next most recent plays 🌸:
 🌵 Friday, December 5, 1997 at CSU Convocation Center in Cleveland, OH
 🌵 Friday, November 28, 1997 at The Centrum in Worcester, MA
+
+https://phish.in/black-eyed-katy
 `,
 	}, embed)
 }
@@ -99,6 +102,7 @@ Next most recent plays 🌸:
 func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
 	lastPlayed := phishin.LastPlayed{
 		Title: "And So To Bed",
+		URL:   "https://phish.in/and-so-to-bed",
 		Shows: []phishin.Show{
 			{
 				Date: phishin.DateFromString("2021-10-15"),
@@ -112,8 +116,11 @@ func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
 	embed, err := embedForLastPlayed(lastPlayed)
 	require.NoError(t, err)
 	assert.Equal(t, discordgo.MessageEmbed{
-		Color:       green,
-		Title:       "And So To Bed was last played on Friday, October 15, 2021",
-		Description: "It was played at Golden 1 Center in Sacramento, CA",
+		Color: green,
+		Title: "And So To Bed was last played on Friday, October 15, 2021",
+		Description: `It was played at Golden 1 Center in Sacramento, CA
+
+https://phish.in/and-so-to-bed
+`,
 	}, embed)
 }
