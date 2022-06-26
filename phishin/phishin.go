@@ -175,11 +175,22 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 	if err != nil {
 		return LastPlayed{}, fmt.Errorf("LastPlayed: %w", err)
 	}
-	mostRecentPlays := last(song.Data.Tracks, count)
 	lastPlayed := LastPlayed{
 		Title: song.Data.Title,
 	}
-	for _, track := range mostRecentPlays {
+	var exists struct{}
+	seen := make(map[int]struct{})
+	tracks := make([]SongTrack, 0, count)
+	for i := len(song.Data.Tracks) - 1; i >= 0 && len(tracks) < count; i-- {
+		track := song.Data.Tracks[i]
+		if _, ok := seen[track.ShowID]; !ok {
+			tracks = append(tracks, track)
+			seen[track.ShowID] = exists
+		}
+	}
+
+	for i := len(tracks) - 1; i >= 0; i-- {
+		track := tracks[i]
 		show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
 		if err != nil {
 			return lastPlayed, err
@@ -217,19 +228,4 @@ func (c Client) SongByTitle(ctx context.Context, title string) (SongByTitle, err
 
 func slugify(s string) string {
 	return strings.ToLower(strings.ReplaceAll(s, " ", "-"))
-}
-
-func last[E any](s []E, n int) []E {
-	if len(s) < n {
-		n = len(s)
-	}
-	return s[len(s)-n:]
-}
-
-func parseDate(s string) time.Time {
-	t, err := time.Parse("2006-01-02", s)
-	if err != nil {
-		return time.Time{}
-	}
-	return t
 }

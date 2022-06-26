@@ -39,3 +39,14 @@ func TestLastPlayed(t *testing.T) {
 	mostRecent := last.Shows[len(last.Shows)-1]
 	assert.Equal(t, DateFromString("1997-12-30"), mostRecent.Date)
 }
+
+func TestLastPlayedMultipleSameShow(t *testing.T) {
+	token := os.Getenv("PHISHIN_TOKEN")
+	p := New(token)
+	last, err := p.LastPlayed(context.Background(), "Moby Dick", 3)
+	require.NoError(t, err)
+	assert.Equal(t, "Moby Dick", last.Title)
+	require.Len(t, last.Shows, 3)
+	first := last.Shows[0]
+	assert.Equal(t, DateFromString("1993-02-19"), first.Date)
+}
