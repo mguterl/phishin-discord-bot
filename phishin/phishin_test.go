@@ -20,13 +20,20 @@ func TestShowOnDate(t *testing.T) {
 	assert.Len(t, show.Data.Tracks, 20)
 }
 
-func TestSongs(t *testing.T) {
+func TestSongByTitle(t *testing.T) {
 	token := os.Getenv("PHISHIN_TOKEN")
 	p := New(token)
 	song, err := p.SongByTitle(context.Background(), "Scent of a Mule")
 	require.NoError(t, err)
 	assert.True(t, song.Success)
 	assert.Equal(t, "Scent of a Mule", song.Data.Title)
+}
+
+func TestSongByTitleDoesNotExist(t *testing.T) {
+	token := os.Getenv("PHISHIN_TOKEN")
+	p := New(token)
+	_, err := p.SongByTitle(context.Background(), "Does not exist")
+	require.Error(t, err)
 }
 
 func TestLastPlayed(t *testing.T) {
@@ -51,4 +58,11 @@ func TestLastPlayedMultipleSameShow(t *testing.T) {
 	first := last.Shows[0]
 	assert.Equal(t, DateFromString("1993-02-19"), first.Date)
 	assert.Equal(t, "https://phish.in/moby-dick", last.URL)
+}
+
+func TestLastPlayedMissingSong(t *testing.T) {
+	token := os.Getenv("PHISHIN_TOKEN")
+	p := New(token)
+	_, err := p.LastPlayed(context.Background(), "Does Not Exist", 3)
+	require.Error(t, err)
 }

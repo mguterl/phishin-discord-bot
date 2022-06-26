@@ -166,7 +166,6 @@ func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowOnDate, error)
 	if err != nil {
 		return s, fmt.Errorf("ShowOnDate: %v: %w", date, err)
 	}
-
 	return s, nil
 }
 
@@ -234,6 +233,9 @@ func (c Client) SongByTitle(ctx context.Context, title string) (SongByTitle, err
 	err = json.NewDecoder(resp.Body).Decode(&s)
 	if err != nil {
 		return s, fmt.Errorf("SongByTitle: %v: %w", title, err)
+	}
+	if !s.Success {
+		return s, fmt.Errorf("SongByTitle not found: %v", title)
 	}
 
 	return s, nil
