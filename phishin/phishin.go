@@ -74,7 +74,7 @@ type Show struct {
 	UpdatedAt  time.Time     `json:"updated_at"`
 }
 
-type ShowOnDate struct {
+type ShowResponse struct {
 	Success      bool `json:"success"`
 	TotalEntries int  `json:"total_entries"`
 	TotalPages   int  `json:"total_pages"`
@@ -82,7 +82,7 @@ type ShowOnDate struct {
 	Data         Show `json:"data"`
 }
 
-type SongByTitle struct {
+type SongResponse struct {
 	Success      bool `json:"success"`
 	TotalEntries int  `json:"total_entries"`
 	TotalPages   int  `json:"total_pages"`
@@ -145,23 +145,23 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowOnDate, error) {
+func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowResponse, error) {
 	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return ShowOnDate{}, fmt.Errorf("ShowOnDate: %v: %w", date, err)
+		return ShowResponse{}, fmt.Errorf("ShowOnDate: %v: %w", date, err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return ShowOnDate{}, fmt.Errorf("ShowOnDate: %v: %w", date, err)
+		return ShowResponse{}, fmt.Errorf("ShowOnDate: %v: %w", date, err)
 	}
 	defer resp.Body.Close()
 
-	var s ShowOnDate
+	var s ShowResponse
 	err = json.NewDecoder(resp.Body).Decode(&s)
 	if err != nil {
 		return s, fmt.Errorf("ShowOnDate: %v: %w", date, err)
@@ -169,22 +169,22 @@ func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowOnDate, error)
 	return s, nil
 }
 
-func (c Client) RandomShow(ctx context.Context) (ShowOnDate, error) {
+func (c Client) RandomShow(ctx context.Context) (ShowResponse, error) {
 	url := fmt.Sprintf("%s/%s", baseApiUrl, "random-show")
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return ShowOnDate{}, fmt.Errorf("RandomShow: %w", err)
+		return ShowResponse{}, fmt.Errorf("RandomShow: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return ShowOnDate{}, fmt.Errorf("RandomShow: %w", err)
+		return ShowResponse{}, fmt.Errorf("RandomShow: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var s ShowOnDate
+	var s ShowResponse
 	err = json.NewDecoder(resp.Body).Decode(&s)
 	if err != nil {
 		return s, fmt.Errorf("RandomShow: %w", err)
@@ -236,23 +236,23 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 	return lastPlayed, nil
 }
 
-func (c Client) SongByTitle(ctx context.Context, title string) (SongByTitle, error) {
+func (c Client) SongByTitle(ctx context.Context, title string) (SongResponse, error) {
 	slug := slugify(title)
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "songs", slug)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return SongByTitle{}, fmt.Errorf("SongByTitle: %v: %w", title, err)
+		return SongResponse{}, fmt.Errorf("SongByTitle: %v: %w", title, err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return SongByTitle{}, fmt.Errorf("SongByTitle: %v: %w", title, err)
+		return SongResponse{}, fmt.Errorf("SongByTitle: %v: %w", title, err)
 	}
 	defer resp.Body.Close()
 
-	var s SongByTitle
+	var s SongResponse
 	err = json.NewDecoder(resp.Body).Decode(&s)
 	if err != nil {
 		return s, fmt.Errorf("SongByTitle: %v: %w", title, err)
