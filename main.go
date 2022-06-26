@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
+	"strings"
 	"syscall"
 	"time"
 
@@ -48,6 +49,19 @@ func main() {
 			}
 
 			show, err := phish.ShowOnDate(context.Background(), date)
+			if err != nil || show.Data.ID == 0 {
+				return
+			}
+
+			setlist := setlistForShow(show.Data)
+			embed, err := embedForSetlist(setlist)
+			if err != nil {
+				return
+			}
+			s.ChannelMessageSendEmbed(m.ChannelID, &embed)
+		case RandomCommand:
+			show, err := phish.RandomShow(context.Background())
+
 			if err != nil || show.Data.ID == 0 {
 				return
 			}
@@ -102,6 +116,7 @@ type Command int
 const (
 	SetlistCommand Command = iota
 	LastPlayedCommand
+	RandomCommand
 	UnknownCommand
 )
 
@@ -118,22 +133,24 @@ func getEnv(key string) string {
 }
 
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(setlist|lastplayed)\s+(.*)$`)
+	r := regexp.MustCompile(`\.(setlist|random|lastplayed)(.*)$`)
 	match := r.FindStringSubmatch(s)
 
-	if len(match) != 3 {
+	if len(match) == 0 {
 		return UnknownCommand, nil, nil
 	}
 
 	switch match[1] {
 	case "setlist":
-		t, err := dateparse.ParseAny(match[2])
+		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
 		if err != nil {
 			return UnknownCommand, nil, err
 		}
 		return SetlistCommand, t, nil
+	case "random":
+		return RandomCommand, nil, nil
 	case "lastplayed":
-		return LastPlayedCommand, match[2], nil
+		return LastPlayedCommand, strings.TrimSpace(match[2]), nil
 	}
 
 	return UnknownCommand, nil, nil

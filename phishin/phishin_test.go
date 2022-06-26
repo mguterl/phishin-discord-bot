@@ -20,6 +20,15 @@ func TestShowOnDate(t *testing.T) {
 	assert.Len(t, show.Data.Tracks, 20)
 }
 
+func TestRandomShow(t *testing.T) {
+	token := os.Getenv("PHISHIN_TOKEN")
+	p := New(token)
+	show, err := p.RandomShow(context.Background())
+	require.NoError(t, err)
+	assert.Equal(t, "Shoreline Amphitheatre", show.Data.Venue.Name)
+	assert.Len(t, show.Data.Tracks, 20)
+}
+
 func TestSongByTitle(t *testing.T) {
 	token := os.Getenv("PHISHIN_TOKEN")
 	p := New(token)

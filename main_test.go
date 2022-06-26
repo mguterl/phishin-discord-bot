@@ -76,11 +76,26 @@ func TestSetlist(t *testing.T) {
 	}, setlist.Sets)
 }
 
-func TestParseCommand(t *testing.T) {
+func TestParseSetlistCommand(t *testing.T) {
 	command, args, err := parseCommand(".setlist 8/31/21")
 	require.NoError(t, err)
 	assert.Equal(t, SetlistCommand, command)
 	d, ok := args.(time.Time)
 	require.True(t, ok)
 	assert.Equal(t, date(2021, 8, 31), d)
+}
+
+func TestParseRandomCommand(t *testing.T) {
+	command, _, err := parseCommand(".random")
+	require.NoError(t, err)
+	assert.Equal(t, RandomCommand, command)
+}
+
+func TestParseLastPlayedCommand(t *testing.T) {
+	command, args, err := parseCommand(".lastplayed song title")
+	require.NoError(t, err)
+	assert.Equal(t, LastPlayedCommand, command)
+	s, ok := args.(string)
+	require.True(t, ok)
+	assert.Equal(t, "song title", s)
 }

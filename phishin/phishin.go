@@ -169,6 +169,29 @@ func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowOnDate, error)
 	return s, nil
 }
 
+func (c Client) RandomShow(ctx context.Context) (ShowOnDate, error) {
+	url := fmt.Sprintf("%s/%s", baseApiUrl, "random-show")
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return ShowOnDate{}, fmt.Errorf("RandomShow: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return ShowOnDate{}, fmt.Errorf("RandomShow: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var s ShowOnDate
+	err = json.NewDecoder(resp.Body).Decode(&s)
+	if err != nil {
+		return s, fmt.Errorf("RandomShow: %w", err)
+	}
+	return s, nil
+}
+
 type LastPlayed struct {
 	Title string
 	URL   string
