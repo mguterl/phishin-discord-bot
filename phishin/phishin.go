@@ -178,9 +178,14 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 	lastPlayed := LastPlayed{
 		Title: song.Data.Title,
 	}
+
+	// A song may appear multiple times for a single show, but we only want to
+	// display it once per show.
 	var exists struct{}
 	seen := make(map[int]struct{})
 	tracks := make([]SongTrack, 0, count)
+
+	// Iterate backwards through the list.
 	for i := len(song.Data.Tracks) - 1; i >= 0 && len(tracks) < count; i-- {
 		track := song.Data.Tracks[i]
 		if _, ok := seen[track.ShowID]; !ok {
@@ -189,6 +194,7 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 		}
 	}
 
+	// Keep shows in date ascending order to match the original API response.
 	for i := len(tracks) - 1; i >= 0; i-- {
 		track := tracks[i]
 		show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
