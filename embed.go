@@ -37,12 +37,14 @@ func embedForLastPlayed(lastPlayed phishin.LastPlayed) (discordgo.MessageEmbed, 
 	var d bytes.Buffer
 	last, rest := lastPlayed.Shows[len(lastPlayed.Shows)-1], lastPlayed.Shows[:len(lastPlayed.Shows)-1]
 
-	d.WriteString(fmt.Sprintf("It was played at %s in %s\n\n", last.Venue.Name, last.Venue.Location))
-	// TODO: Handle empty rest
-	d.WriteString("Next most recent plays 🌸:\n")
-	for i := len(rest) - 1; i >= 0; i-- {
-		show := rest[i]
-		d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", show.Date.Format("Monday, January 2, 2006"), show.Venue.Name, show.Venue.Location))
+	d.WriteString(fmt.Sprintf("It was played at %s in %s", last.Venue.Name, last.Venue.Location))
+
+	if len(rest) > 0 {
+		d.WriteString("\n\nNext most recent plays 🌸:\n")
+		for i := len(rest) - 1; i >= 0; i-- {
+			show := rest[i]
+			d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", show.Date.Format("Monday, January 2, 2006"), show.Venue.Name, show.Venue.Location))
+		}
 	}
 
 	return discordgo.MessageEmbed{

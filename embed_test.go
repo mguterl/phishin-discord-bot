@@ -95,3 +95,25 @@ Next most recent plays 🌸:
 `,
 	}, embed)
 }
+
+func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
+	lastPlayed := phishin.LastPlayed{
+		Title: "And So To Bed",
+		Shows: []phishin.Show{
+			{
+				Date: phishin.DateFromString("2021-10-15"),
+				Venue: phishin.Venue{
+					Name:     "Golden 1 Center",
+					Location: "Sacramento, CA",
+				},
+			},
+		},
+	}
+	embed, err := embedForLastPlayed(lastPlayed)
+	require.NoError(t, err)
+	assert.Equal(t, discordgo.MessageEmbed{
+		Color:       green,
+		Title:       "And So To Bed was last played on Friday, October 15, 2021",
+		Description: "It was played at Golden 1 Center in Sacramento, CA",
+	}, embed)
+}
