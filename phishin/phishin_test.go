@@ -79,4 +79,7 @@ func TestLastPlayedMissingSong(t *testing.T) {
 func TestSlugify(t *testing.T) {
 	assert.Equal(t, "black-eyed-katy", slugify("Black-Eyed Katy"))
 	assert.Equal(t, "colonel-forbin-s-ascent", slugify("Colonel Forbin's Ascent"))
+	assert.Equal(t, "ac-dc-bag", slugify("AC/DC Bag"))
+	assert.Equal(t, "bill-bailey-won-t-you-please-come-home", slugify("Bill Bailey, Won't You Please Come Home?"))
+	assert.Equal(t, "mean-mr-mustard", "Mean Mr. Mustard")
 }
