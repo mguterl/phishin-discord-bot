@@ -264,6 +264,11 @@ func (c Client) SongByTitle(ctx context.Context, title string) (SongResponse, er
 	return s, nil
 }
 
+var replacer = strings.NewReplacer(
+	" ", "-",
+	"'", "-",
+)
+
 func slugify(s string) string {
-	return strings.ToLower(strings.ReplaceAll(s, " ", "-"))
+	return strings.ToLower(replacer.Replace(s))
 }

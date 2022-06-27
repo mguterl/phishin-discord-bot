@@ -75,3 +75,8 @@ func TestLastPlayedMissingSong(t *testing.T) {
 	_, err := p.LastPlayed(context.Background(), "Does Not Exist", 3)
 	require.Error(t, err)
 }
+
+func TestSlugify(t *testing.T) {
+	assert.Equal(t, "black-eyed-katy", slugify("Black-Eyed Katy"))
+	assert.Equal(t, "colonel-forbin-s-ascent", slugify("Colonel Forbin's Ascent"))
+}
