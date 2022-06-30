@@ -4,16 +4,8 @@ PROJECT_NAME := "mguterl/phishin-discord-bot"
 
 release: docker-build publish
 
-docker-build: fetch-version
-	docker build --platform linux/amd64 -t $(PROJECT_NAME):latest -t $(PROJECT_NAME):$(VERSION) .
+docker-build:
+	docker build --platform linux/amd64 -t $(PROJECT_NAME) .
 
-publish: publish-latest publish-version
-
-publish-latest:
-	docker push $(PROJECT_NAME):latest
-
-publish-version: fetch-version
-	docker push $(PROJECT_NAME):$(VERSION)
-
-fetch-version:
-	$(eval VERSION := $(shell git rev-parse --short HEAD))
+publish:
+	docker push $(PROJECT_NAME)
