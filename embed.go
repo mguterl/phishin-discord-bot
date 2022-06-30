@@ -54,3 +54,24 @@ func embedForLastPlayed(lastPlayed phishin.LastPlayed) (discordgo.MessageEmbed, 
 		Description: d.String(),
 	}, nil
 }
+
+func embedForLongest(longest phishin.Longest) (discordgo.MessageEmbed, error) {
+	var title string
+
+	if len(longest.Tracks) == 1 {
+		title = fmt.Sprintf("The longest version of %s", longest.Title)
+	} else {
+		title = fmt.Sprintf("The %d longest versions of %s", len(longest.Tracks), longest.Title)
+	}
+
+	var d bytes.Buffer
+	for _, track := range longest.Tracks {
+		d.WriteString(fmt.Sprintf("%s on %s 🐟🐟🐟 @ %s in %s\n\n", formatDuration(track.Duration), track.Show.Date.Format("Monday, January 2, 2006"), track.Show.Venue.Name, track.Show.Venue.Location))
+	}
+
+	return discordgo.MessageEmbed{
+		Color:       green,
+		Title:       title,
+		Description: d.String(),
+	}, nil
+}

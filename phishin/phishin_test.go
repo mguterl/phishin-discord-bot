@@ -76,10 +76,19 @@ func TestLastPlayedMissingSong(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestLongest(t *testing.T) {
+	token := os.Getenv("PHISHIN_TOKEN")
+	p := New(token)
+	longest, err := p.Longest(context.Background(), "Access Me", 3)
+	require.NoError(t, err)
+	assert.Equal(t, "Access Me", longest.Title)
+	assert.Len(t, longest.Tracks, 3)
+}
+
 func TestSlugify(t *testing.T) {
 	assert.Equal(t, "black-eyed-katy", slugify("Black-Eyed Katy"))
 	assert.Equal(t, "colonel-forbin-s-ascent", slugify("Colonel Forbin's Ascent"))
 	assert.Equal(t, "ac-dc-bag", slugify("AC/DC Bag"))
 	assert.Equal(t, "bill-bailey-won-t-you-please-come-home", slugify("Bill Bailey, Won't You Please Come Home?"))
-	assert.Equal(t, "mean-mr-mustard", "Mean Mr. Mustard")
+	assert.Equal(t, "mean-mr-mustard", slugify("Mean Mr. Mustard"))
 }

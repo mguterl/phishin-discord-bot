@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 	"time"
 )
@@ -121,6 +122,22 @@ type Date struct {
 	time.Time
 }
 
+type LastPlayed struct {
+	Title string
+	URL   string
+	Shows []Show
+}
+
+type Longest struct {
+	Title  string
+	Tracks []LongestTrack
+}
+
+type LongestTrack struct {
+	Duration time.Duration
+	Show     Show
+}
+
 func DateFromTime(t time.Time) Date {
 	return Date{Time: t}
 }
@@ -192,12 +209,6 @@ func (c Client) RandomShow(ctx context.Context) (ShowResponse, error) {
 	return s, nil
 }
 
-type LastPlayed struct {
-	Title string
-	URL   string
-	Shows []Show
-}
-
 func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPlayed, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
@@ -264,6 +275,38 @@ func (c Client) SongByTitle(ctx context.Context, title string) (SongResponse, er
 	return s, nil
 }
 
+func (c Client) Longest(ctx context.Context, title string, count int) (Longest, error) {
+	song, err := c.SongByTitle(ctx, title)
+	if err != nil {
+		return Longest{}, fmt.Errorf("Longest: %v: %w", title, err)
+	}
+
+	longest := Longest{
+		Title: song.Data.Title,
+	}
+	tracks := song.Data.Tracks
+	sort.Slice(tracks, func(i, j int) bool {
+		return tracks[i].Duration > tracks[j].Duration
+	})
+
+	for i := 0; i < min(len(tracks), count); i++ {
+		track := tracks[i]
+		longestTrack := LongestTrack{
+			Duration: duration(track.Duration),
+		}
+
+		show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
+		if err != nil {
+			return longest, fmt.Errorf("Longest: %v: %w", title, err)
+		}
+
+		longestTrack.Show = show.Data
+		longest.Tracks = append(longest.Tracks, longestTrack)
+	}
+
+	return longest, nil
+}
+
 var replacer = strings.NewReplacer(
 	" ", "-",
 	"'", "-",
@@ -275,4 +318,15 @@ var replacer = strings.NewReplacer(
 
 func slugify(s string) string {
 	return strings.ToLower(replacer.Replace(s))
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func duration(millis int) time.Duration {
+	return time.Duration(millis * int(time.Millisecond))
 }

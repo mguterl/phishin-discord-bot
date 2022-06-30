@@ -88,6 +88,22 @@ func main() {
 				return
 			}
 			s.ChannelMessageSendEmbed(m.ChannelID, &embed)
+		case LongestCommand:
+			title, ok := args.(string)
+			if !ok {
+				return
+			}
+
+			longest, err := phish.Longest(context.Background(), title, 3)
+			if err != nil {
+				return
+			}
+
+			embed, err := embedForLongest(longest)
+			if err != nil {
+				return
+			}
+			s.ChannelMessageSendEmbed(m.ChannelID, &embed)
 		}
 	}
 
@@ -117,6 +133,7 @@ const (
 	SetlistCommand Command = iota
 	LastPlayedCommand
 	RandomCommand
+	LongestCommand
 	UnknownCommand
 )
 
@@ -133,7 +150,7 @@ func getEnv(key string) string {
 }
 
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(setlist|random|lastplayed)(.*)$`)
+	r := regexp.MustCompile(`\.(setlist|random|lastplayed|longest)(.*)$`)
 	match := r.FindStringSubmatch(s)
 
 	if len(match) == 0 {
@@ -151,6 +168,8 @@ func parseCommand(s string) (Command, interface{}, error) {
 		return RandomCommand, nil, nil
 	case "lastplayed":
 		return LastPlayedCommand, strings.TrimSpace(match[2]), nil
+	case "longest":
+		return LongestCommand, strings.TrimSpace(match[2]), nil
 	}
 
 	return UnknownCommand, nil, nil
