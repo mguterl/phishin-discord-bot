@@ -26,7 +26,7 @@ func TestRandomShow(t *testing.T) {
 	show, err := p.RandomShow(context.Background())
 	require.NoError(t, err)
 	assert.Greater(t, len(show.Data.Venue.Name), 0)
-	assert.Greater(t, len(show.Data.Tracks), 20)
+	assert.Greater(t, len(show.Data.Tracks), 5)
 }
 
 func TestSongByTitle(t *testing.T) {
