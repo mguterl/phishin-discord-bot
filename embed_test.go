@@ -2,12 +2,19 @@ package main
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/mguterl/phishin-discord-bot/phishin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func parseDuration(t *testing.T, s string) time.Duration {
+	duration, err := time.ParseDuration(s)
+	require.NoError(t, err)
+	return duration
+}
 
 func TestSetlistEmbed(t *testing.T) {
 	setlist := &Setlist{

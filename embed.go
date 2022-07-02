@@ -3,10 +3,29 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"math"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/mguterl/phishin-discord-bot/phishin"
 )
+
+func formatDayOfWeek(d phishin.Date) string {
+	return d.Format("Monday, January 2, 2006")
+}
+
+func formatDate(d phishin.Date) string {
+	return fmt.Sprintf("%d/%d/%d", d.Month(), d.Day(), d.Year())
+}
+
+func formatDuration(t time.Duration) string {
+	s := t.Seconds()
+	hh := int(s / 3600)
+	mm := int(math.Mod(s, 3600) / 60)
+	ss := int(math.Mod(s, 60))
+
+	return fmt.Sprintf("%02d:%02d:%02d", hh, mm, ss)
+}
 
 func embedForSetlist(setlist *Setlist) (discordgo.MessageEmbed, error) {
 	var d bytes.Buffer
@@ -21,11 +40,11 @@ func embedForSetlist(setlist *Setlist) (discordgo.MessageEmbed, error) {
 		}
 		d.WriteString("\n\n")
 	}
-	d.WriteString(fmt.Sprintf("https://phish.in/%s\n", setlist.Date.Format("2006-01-02")))
+	d.WriteString(fmt.Sprintf("%s\n", phishin.ShowURL(setlist.Date)))
 
 	return discordgo.MessageEmbed{
 		Color:       green,
-		Title:       fmt.Sprintf("Setlist for %s @ %s in %s", formatDate(setlist.Date.Time), setlist.Venue, setlist.Location),
+		Title:       fmt.Sprintf("Setlist for %s @ %s in %s", formatDate(setlist.Date), setlist.Venue, setlist.Location),
 		Description: d.String(),
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: fmt.Sprintf("Total set duration: %s", formatDuration(setlist.Duration)),
@@ -43,14 +62,14 @@ func embedForLastPlayedTracks(lastPlayed *phishin.LastPlayedTracksResponse) (dis
 		d.WriteString("\nNext most recent plays 🌸:\n")
 		for i := len(rest) - 1; i >= 0; i-- {
 			show := rest[i]
-			d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", show.Date.Format("Monday, January 2, 2006"), show.Venue.Name, show.Venue.Location))
+			d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", formatDayOfWeek(show.Date), show.Venue.Name, show.Venue.Location))
 		}
 	}
 	d.WriteString(fmt.Sprintf("\n%s\n", lastPlayed.URL))
 
 	return discordgo.MessageEmbed{
 		Color:       green,
-		Title:       fmt.Sprintf("%s was last played on %s", lastPlayed.Title, last.Date.Format("Monday, January 2, 2006")),
+		Title:       fmt.Sprintf("%s was last played on %s", lastPlayed.Title, formatDayOfWeek(last.Date)),
 		Description: d.String(),
 	}, nil
 }
@@ -66,7 +85,7 @@ func embedForLongestTracks(longest *phishin.LongestTracksResponse) (discordgo.Me
 
 	var d bytes.Buffer
 	for _, track := range longest.Tracks {
-		d.WriteString(fmt.Sprintf("%s on %s 🐟🐟🐟 @ %s in %s\n\n", formatDuration(track.Duration), track.Show.Date.Format("Monday, January 2, 2006"), track.Show.Venue.Name, track.Show.Venue.Location))
+		d.WriteString(fmt.Sprintf("%s on %s 🐟🐟🐟 @ %s in %s\n\n", formatDuration(track.Duration), formatDayOfWeek(track.Show.Date), track.Show.Venue.Name, track.Show.Venue.Location))
 	}
 
 	return discordgo.MessageEmbed{

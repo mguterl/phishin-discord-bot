@@ -206,6 +206,10 @@ func (c *Client) get(ctx context.Context, url string, v interface{}) error {
 	return nil
 }
 
+func ShowURL(d Date) string {
+	return fmt.Sprintf("%s/%s", baseURL, d.Format("2006-01-02"))
+}
+
 func (c *Client) ShowOnDate(ctx context.Context, t time.Time) (*ShowResponse, error) {
 	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)

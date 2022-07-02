@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"math"
 	"os"
 	"os/signal"
 	"regexp"
@@ -173,64 +172,4 @@ func parseCommand(s string) (Command, interface{}, error) {
 	}
 
 	return UnknownCommand, nil, nil
-}
-
-func date(year int, month time.Month, day int) time.Time {
-	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
-}
-
-func formatDate(t time.Time) string {
-	return fmt.Sprintf("%d/%d/%d", t.Month(), t.Day(), t.Year())
-}
-
-func formatDuration(t time.Duration) string {
-	s := t.Seconds()
-	hh := int(s / 3600)
-	mm := int(math.Mod(s, 3600) / 60)
-	ss := int(math.Mod(s, 60))
-
-	return fmt.Sprintf("%02d:%02d:%02d", hh, mm, ss)
-}
-
-func duration(millis int) time.Duration {
-	return time.Duration(millis * int(time.Millisecond))
-}
-
-type Setlist struct {
-	Date     phishin.Date
-	Venue    string
-	Location string
-	Duration time.Duration
-	Sets     []*Set
-}
-
-type Set struct {
-	Name     string
-	Duration time.Duration
-	Songs    []string
-}
-
-func setlistForShow(show phishin.Show) *Setlist {
-	sets := []*Set{}
-	var set *Set
-
-	for _, t := range show.Tracks {
-		if set == nil {
-			set = &Set{Name: t.SetName, Duration: 0 * time.Second}
-		} else if set.Name != t.SetName {
-			sets = append(sets, set)
-			set = &Set{Name: t.SetName, Duration: 0 * time.Second}
-		}
-		set.Duration += duration(t.Duration)
-		set.Songs = append(set.Songs, t.Title)
-	}
-	sets = append(sets, set)
-
-	return &Setlist{
-		Date:     show.Date,
-		Venue:    show.Venue.Name,
-		Location: show.Venue.Location,
-		Duration: duration(show.Duration),
-		Sets:     sets,
-	}
 }
