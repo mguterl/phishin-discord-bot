@@ -162,49 +162,73 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (c *Client) ShowOnDate(ctx context.Context, t time.Time) (*ShowResponse, error) {
-	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
-	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)
+var replacer = strings.NewReplacer(
+	" ", "-",
+	"'", "-",
+	"/", "-",
+	",", "",
+	".", "",
+	"?", "",
+)
 
+func slugify(s string) string {
+	return strings.ToLower(replacer.Replace(s))
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func duration(millis int) time.Duration {
+	return time.Duration(millis * int(time.Millisecond))
+}
+
+func (c *Client) get(ctx context.Context, url string, v interface{}) error {
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return nil, err
+		return nil
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return nil, err
+		return nil
 	}
-	defer resp.Body.Close()
 
-	s := &ShowResponse{}
-	err = json.NewDecoder(resp.Body).Decode(s)
-	if err != nil {
-		return nil, err
+	if v != nil {
+		defer resp.Body.Close()
+		return json.NewDecoder(resp.Body).Decode(v)
 	}
-	return s, nil
+
+	return nil
+}
+
+func (c *Client) ShowOnDate(ctx context.Context, t time.Time) (*ShowResponse, error) {
+	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
+	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)
+	s := &ShowResponse{}
+	return s, c.get(ctx, url, s)
 }
 
 func (c *Client) RandomShow(ctx context.Context) (*ShowResponse, error) {
 	url := fmt.Sprintf("%s/%s", baseApiUrl, "random-show")
-
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
-
-	resp, err := c.http.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
 	s := &ShowResponse{}
-	err = json.NewDecoder(resp.Body).Decode(s)
+	return s, c.get(ctx, url, s)
+}
+
+func (c *Client) SongByTitle(ctx context.Context, title string) (*SongResponse, error) {
+	slug := slugify(title)
+	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "songs", slug)
+	s := &SongResponse{}
+	err := c.get(ctx, url, s)
 	if err != nil {
 		return nil, err
+	}
+	if !s.Success { // TODO: Move this into get helper
+		return nil, fmt.Errorf("SongByTitle not found: %v", title)
 	}
 	return s, nil
 }
@@ -247,34 +271,6 @@ func (c *Client) LastPlayed(ctx context.Context, title string, count int) (*Last
 	return lastPlayed, nil
 }
 
-func (c *Client) SongByTitle(ctx context.Context, title string) (*SongResponse, error) {
-	slug := slugify(title)
-	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "songs", slug)
-
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
-
-	resp, err := c.http.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	s := &SongResponse{}
-	err = json.NewDecoder(resp.Body).Decode(&s)
-	if err != nil {
-		return nil, err
-	}
-	if !s.Success {
-		return s, fmt.Errorf("SongByTitle not found: %v", title)
-	}
-
-	return s, nil
-}
-
 func (c *Client) Longest(ctx context.Context, title string, count int) (*Longest, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
@@ -305,28 +301,4 @@ func (c *Client) Longest(ctx context.Context, title string, count int) (*Longest
 	}
 
 	return longest, nil
-}
-
-var replacer = strings.NewReplacer(
-	" ", "-",
-	"'", "-",
-	"/", "-",
-	",", "",
-	".", "",
-	"?", "",
-)
-
-func slugify(s string) string {
-	return strings.ToLower(replacer.Replace(s))
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func duration(millis int) time.Duration {
-	return time.Duration(millis * int(time.Millisecond))
 }
