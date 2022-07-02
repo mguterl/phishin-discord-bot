@@ -78,12 +78,12 @@ func main() {
 				return
 			}
 
-			lastPlayed, err := phish.LastPlayed(context.Background(), title, 4)
+			lastPlayed, err := phish.LastPlayedTracks(context.Background(), title, 4)
 			if err != nil {
 				return
 			}
 
-			embed, err := embedForLastPlayed(lastPlayed)
+			embed, err := embedForLastPlayedTracks(lastPlayed)
 			if err != nil {
 				return
 			}
@@ -94,12 +94,12 @@ func main() {
 				return
 			}
 
-			longest, err := phish.Longest(context.Background(), title, 3)
+			longest, err := phish.LongestTracks(context.Background(), title, 3)
 			if err != nil {
 				return
 			}
 
-			embed, err := embedForLongest(longest)
+			embed, err := embedForLongestTracks(longest)
 			if err != nil {
 				return
 			}

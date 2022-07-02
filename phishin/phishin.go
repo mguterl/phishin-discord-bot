@@ -122,13 +122,13 @@ type Date struct {
 	time.Time
 }
 
-type LastPlayed struct {
+type LastPlayedTracksResponse struct {
 	Title string
 	URL   string
 	Shows []Show
 }
 
-type Longest struct {
+type LongestTracksResponse struct {
 	Title  string
 	Tracks []LongestTrack
 }
@@ -233,12 +233,12 @@ func (c *Client) SongByTitle(ctx context.Context, title string) (*SongResponse, 
 	return s, nil
 }
 
-func (c *Client) LastPlayed(ctx context.Context, title string, count int) (*LastPlayed, error) {
+func (c *Client) LastPlayedTracks(ctx context.Context, title string, count int) (*LastPlayedTracksResponse, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
 		return nil, err
 	}
-	lastPlayed := &LastPlayed{
+	lastPlayed := &LastPlayedTracksResponse{
 		Title: song.Data.Title,
 		URL:   song.Data.URL(),
 	}
@@ -271,13 +271,13 @@ func (c *Client) LastPlayed(ctx context.Context, title string, count int) (*Last
 	return lastPlayed, nil
 }
 
-func (c *Client) Longest(ctx context.Context, title string, count int) (*Longest, error) {
+func (c *Client) LongestTracks(ctx context.Context, title string, count int) (*LongestTracksResponse, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
-		return nil, fmt.Errorf("Longest: %v: %w", title, err)
+		return nil, fmt.Errorf("longest tracks: %v: %w", title, err)
 	}
 
-	longest := &Longest{
+	longest := &LongestTracksResponse{
 		Title: song.Data.Title,
 	}
 	tracks := song.Data.Tracks

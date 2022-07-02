@@ -56,7 +56,7 @@ https://phish.in/2021-08-31
 }
 
 func TestLastPlayedEmbed(t *testing.T) {
-	lastPlayed := &phishin.LastPlayed{
+	lastPlayed := &phishin.LastPlayedTracksResponse{
 		Title: "Black-Eyed Katy",
 		URL:   "https://phish.in/black-eyed-katy",
 		Shows: []phishin.Show{
@@ -83,7 +83,7 @@ func TestLastPlayedEmbed(t *testing.T) {
 			},
 		},
 	}
-	embed, err := embedForLastPlayed(lastPlayed)
+	embed, err := embedForLastPlayedTracks(lastPlayed)
 	require.NoError(t, err)
 	assert.Equal(t, discordgo.MessageEmbed{
 		Color: green,
@@ -100,7 +100,7 @@ https://phish.in/black-eyed-katy
 }
 
 func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
-	lastPlayed := &phishin.LastPlayed{
+	lastPlayed := &phishin.LastPlayedTracksResponse{
 		Title: "And So To Bed",
 		URL:   "https://phish.in/and-so-to-bed",
 		Shows: []phishin.Show{
@@ -113,7 +113,7 @@ func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
 			},
 		},
 	}
-	embed, err := embedForLastPlayed(lastPlayed)
+	embed, err := embedForLastPlayedTracks(lastPlayed)
 	require.NoError(t, err)
 	assert.Equal(t, discordgo.MessageEmbed{
 		Color: green,

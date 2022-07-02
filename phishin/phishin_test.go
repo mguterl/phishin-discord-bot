@@ -48,7 +48,7 @@ func TestSongByTitleDoesNotExist(t *testing.T) {
 func TestLastPlayed(t *testing.T) {
 	token := os.Getenv("PHISHIN_TOKEN")
 	p := New(token)
-	last, err := p.LastPlayed(context.Background(), "Black-Eyed Katy", 4)
+	last, err := p.LastPlayedTracks(context.Background(), "Black-Eyed Katy", 4)
 	require.NoError(t, err)
 	assert.Equal(t, "Black-Eyed Katy", last.Title)
 	require.Len(t, last.Shows, 4)
@@ -60,7 +60,7 @@ func TestLastPlayed(t *testing.T) {
 func TestLastPlayedMultipleSameShow(t *testing.T) {
 	token := os.Getenv("PHISHIN_TOKEN")
 	p := New(token)
-	last, err := p.LastPlayed(context.Background(), "Moby Dick", 3)
+	last, err := p.LastPlayedTracks(context.Background(), "Moby Dick", 3)
 	require.NoError(t, err)
 	assert.Equal(t, "Moby Dick", last.Title)
 	require.Len(t, last.Shows, 3)
@@ -72,14 +72,14 @@ func TestLastPlayedMultipleSameShow(t *testing.T) {
 func TestLastPlayedMissingSong(t *testing.T) {
 	token := os.Getenv("PHISHIN_TOKEN")
 	p := New(token)
-	_, err := p.LastPlayed(context.Background(), "Does Not Exist", 3)
+	_, err := p.LastPlayedTracks(context.Background(), "Does Not Exist", 3)
 	require.Error(t, err)
 }
 
 func TestLongest(t *testing.T) {
 	token := os.Getenv("PHISHIN_TOKEN")
 	p := New(token)
-	longest, err := p.Longest(context.Background(), "Access Me", 3)
+	longest, err := p.LongestTracks(context.Background(), "Access Me", 3)
 	require.NoError(t, err)
 	assert.Equal(t, "Access Me", longest.Title)
 	assert.Len(t, longest.Tracks, 3)

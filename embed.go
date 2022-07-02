@@ -33,7 +33,7 @@ func embedForSetlist(setlist *Setlist) (discordgo.MessageEmbed, error) {
 	}, nil
 }
 
-func embedForLastPlayed(lastPlayed *phishin.LastPlayed) (discordgo.MessageEmbed, error) {
+func embedForLastPlayedTracks(lastPlayed *phishin.LastPlayedTracksResponse) (discordgo.MessageEmbed, error) {
 	var d bytes.Buffer
 	last, rest := lastPlayed.Shows[len(lastPlayed.Shows)-1], lastPlayed.Shows[:len(lastPlayed.Shows)-1]
 
@@ -55,7 +55,7 @@ func embedForLastPlayed(lastPlayed *phishin.LastPlayed) (discordgo.MessageEmbed,
 	}, nil
 }
 
-func embedForLongest(longest *phishin.Longest) (discordgo.MessageEmbed, error) {
+func embedForLongestTracks(longest *phishin.LongestTracksResponse) (discordgo.MessageEmbed, error) {
 	var title string
 
 	if len(longest.Tracks) == 1 {
