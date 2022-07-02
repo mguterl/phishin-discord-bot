@@ -71,6 +71,9 @@ func embedForLastPlayedTracks(lastPlayed *phishin.LastPlayedTracksResponse) (dis
 		Color:       green,
 		Title:       fmt.Sprintf("%s was last played on %s", lastPlayed.Title, formatDayOfWeek(last.Date)),
 		Description: d.String(),
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: fmt.Sprintf("Total play count: %d", lastPlayed.PlayCount),
+		},
 	}, nil
 }
 
@@ -92,5 +95,8 @@ func embedForLongestTracks(longest *phishin.LongestTracksResponse) (discordgo.Me
 		Color:       green,
 		Title:       title,
 		Description: d.String(),
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: fmt.Sprintf("Total play count: %d", longest.PlayCount),
+		},
 	}, nil
 }

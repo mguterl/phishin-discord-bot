@@ -123,14 +123,16 @@ type Date struct {
 }
 
 type LastPlayedTracksResponse struct {
-	Title string
-	URL   string
-	Shows []Show
+	Title     string
+	URL       string
+	Shows     []Show
+	PlayCount int
 }
 
 type LongestTracksResponse struct {
-	Title  string
-	Tracks []LongestTrack
+	Title     string
+	Tracks    []LongestTrack
+	PlayCount int
 }
 
 type LongestTrack struct {
@@ -254,13 +256,19 @@ func (c *Client) LastPlayedTracks(ctx context.Context, title string, count int) 
 	tracks := make([]SongTrack, 0, count)
 
 	// Iterate backwards through the list.
-	for i := len(song.Data.Tracks) - 1; i >= 0 && len(tracks) < count; i-- {
+	for i := len(song.Data.Tracks) - 1; i >= 0; i-- {
 		track := song.Data.Tracks[i]
+
 		if _, ok := seen[track.ShowID]; !ok {
-			tracks = append(tracks, track)
+			if len(tracks) < count {
+				tracks = append(tracks, track)
+			}
+
+			// Keep track of all tracks by ShowID for PlayCount
 			seen[track.ShowID] = exists
 		}
 	}
+	lastPlayed.PlayCount = len(seen)
 
 	// Keep shows in date ascending order to match the original API response.
 	for i := len(tracks) - 1; i >= 0; i-- {
@@ -289,20 +297,32 @@ func (c *Client) LongestTracks(ctx context.Context, title string, count int) (*L
 		return tracks[i].Duration > tracks[j].Duration
 	})
 
-	for i := 0; i < min(len(tracks), count); i++ {
+	var exists struct{}
+	seen := make(map[int]struct{})
+
+	for i := 0; i < len(tracks); i++ {
 		track := tracks[i]
-		longestTrack := LongestTrack{
-			Duration: duration(track.Duration),
+
+		if _, ok := seen[track.ShowID]; !ok {
+			// Keep track of all tracks by ShowID for PlayCount
+			seen[track.ShowID] = exists
 		}
 
-		show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
-		if err != nil {
-			return longest, err
-		}
+		if i < count {
+			longestTrack := LongestTrack{
+				Duration: duration(track.Duration),
+			}
 
-		longestTrack.Show = show.Data
-		longest.Tracks = append(longest.Tracks, longestTrack)
+			show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
+			if err != nil {
+				return longest, err
+			}
+
+			longestTrack.Show = show.Data
+			longest.Tracks = append(longest.Tracks, longestTrack)
+		}
 	}
+	longest.PlayCount = len(seen)
 
 	return longest, nil
 }

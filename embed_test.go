@@ -64,8 +64,9 @@ https://phish.in/2021-08-31
 
 func TestLastPlayedEmbed(t *testing.T) {
 	lastPlayed := &phishin.LastPlayedTracksResponse{
-		Title: "Black-Eyed Katy",
-		URL:   "https://phish.in/black-eyed-katy",
+		Title:     "Black-Eyed Katy",
+		URL:       "https://phish.in/black-eyed-katy",
+		PlayCount: 7,
 		Shows: []phishin.Show{
 			{
 				Date: phishin.DateFromString("1997-11-28"),
@@ -103,6 +104,9 @@ Next most recent plays 🌸:
 
 https://phish.in/black-eyed-katy
 `,
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "Total play count: 7",
+		},
 	}, embed)
 }
 
@@ -128,6 +132,8 @@ func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
 		Description: `It was played at Golden 1 Center in Sacramento, CA
 
 https://phish.in/and-so-to-bed
-`,
+`, Footer: &discordgo.MessageEmbedFooter{
+			Text: "Total play count: 0",
+		},
 	}, embed)
 }

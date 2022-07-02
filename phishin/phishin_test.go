@@ -55,6 +55,7 @@ func TestLastPlayed(t *testing.T) {
 	mostRecent := last.Shows[len(last.Shows)-1]
 	assert.Equal(t, DateFromString("1997-12-30"), mostRecent.Date)
 	assert.Equal(t, "https://phish.in/black-eyed-katy", last.URL)
+	assert.Equal(t, 7, last.PlayCount)
 }
 
 func TestLastPlayedMultipleSameShow(t *testing.T) {
@@ -67,6 +68,7 @@ func TestLastPlayedMultipleSameShow(t *testing.T) {
 	first := last.Shows[0]
 	assert.Equal(t, DateFromString("1993-02-19"), first.Date)
 	assert.Equal(t, "https://phish.in/moby-dick", last.URL)
+	assert.Equal(t, 3, last.PlayCount)
 }
 
 func TestLastPlayedMissingSong(t *testing.T) {
@@ -83,6 +85,7 @@ func TestLongest(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, "Access Me", longest.Title)
 	assert.Len(t, longest.Tracks, 3)
+	assert.Equal(t, 6, longest.PlayCount)
 }
 
 func TestSlugify(t *testing.T) {
