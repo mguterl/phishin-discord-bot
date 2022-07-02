@@ -1,6 +1,6 @@
 PROJECT_NAME := "mguterl/phishin-discord-bot"
 
-.PHONY: docker-build publish publish-latest publish-version fetch-version
+.PHONY: docker-build publish
 
 release: docker-build publish
 
