@@ -8,7 +8,7 @@ import (
 	"github.com/mguterl/phishin-discord-bot/phishin"
 )
 
-func embedForSetlist(setlist Setlist) (discordgo.MessageEmbed, error) {
+func embedForSetlist(setlist *Setlist) (discordgo.MessageEmbed, error) {
 	var d bytes.Buffer
 	for _, set := range setlist.Sets {
 		d.WriteString(fmt.Sprintf("🔥 __%s__ (%s)\n", set.Name, formatDuration(set.Duration)))
@@ -33,7 +33,7 @@ func embedForSetlist(setlist Setlist) (discordgo.MessageEmbed, error) {
 	}, nil
 }
 
-func embedForLastPlayed(lastPlayed phishin.LastPlayed) (discordgo.MessageEmbed, error) {
+func embedForLastPlayed(lastPlayed *phishin.LastPlayed) (discordgo.MessageEmbed, error) {
 	var d bytes.Buffer
 	last, rest := lastPlayed.Shows[len(lastPlayed.Shows)-1], lastPlayed.Shows[:len(lastPlayed.Shows)-1]
 
@@ -55,7 +55,7 @@ func embedForLastPlayed(lastPlayed phishin.LastPlayed) (discordgo.MessageEmbed, 
 	}, nil
 }
 
-func embedForLongest(longest phishin.Longest) (discordgo.MessageEmbed, error) {
+func embedForLongest(longest *phishin.Longest) (discordgo.MessageEmbed, error) {
 	var title string
 
 	if len(longest.Tracks) == 1 {

@@ -10,7 +10,7 @@ import (
 )
 
 func TestSetlistEmbed(t *testing.T) {
-	setlist := Setlist{
+	setlist := &Setlist{
 		Date:     phishin.DateFromString("2021-08-31"),
 		Venue:    "Shoreline Amphitheatre",
 		Location: "Mountain View, CA",
@@ -56,7 +56,7 @@ https://phish.in/2021-08-31
 }
 
 func TestLastPlayedEmbed(t *testing.T) {
-	lastPlayed := phishin.LastPlayed{
+	lastPlayed := &phishin.LastPlayed{
 		Title: "Black-Eyed Katy",
 		URL:   "https://phish.in/black-eyed-katy",
 		Shows: []phishin.Show{
@@ -100,7 +100,7 @@ https://phish.in/black-eyed-katy
 }
 
 func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
-	lastPlayed := phishin.LastPlayed{
+	lastPlayed := &phishin.LastPlayed{
 		Title: "And So To Bed",
 		URL:   "https://phish.in/and-so-to-bed",
 		Shows: []phishin.Show{

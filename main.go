@@ -210,7 +210,7 @@ type Set struct {
 	Songs    []string
 }
 
-func setlistForShow(show phishin.Show) Setlist {
+func setlistForShow(show phishin.Show) *Setlist {
 	sets := []*Set{}
 	var set *Set
 
@@ -226,7 +226,7 @@ func setlistForShow(show phishin.Show) Setlist {
 	}
 	sets = append(sets, set)
 
-	return Setlist{
+	return &Setlist{
 		Date:     show.Date,
 		Venue:    show.Venue.Name,
 		Location: show.Venue.Location,

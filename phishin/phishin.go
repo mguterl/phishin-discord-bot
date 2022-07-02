@@ -162,59 +162,59 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (c *Client) ShowOnDate(ctx context.Context, t time.Time) (ShowResponse, error) {
+func (c *Client) ShowOnDate(ctx context.Context, t time.Time) (*ShowResponse, error) {
 	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return ShowResponse{}, fmt.Errorf("ShowOnDate: %v: %w", date, err)
+		return nil, err
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return ShowResponse{}, fmt.Errorf("ShowOnDate: %v: %w", date, err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	var s ShowResponse
-	err = json.NewDecoder(resp.Body).Decode(&s)
+	s := &ShowResponse{}
+	err = json.NewDecoder(resp.Body).Decode(s)
 	if err != nil {
-		return s, fmt.Errorf("ShowOnDate: %v: %w", date, err)
+		return nil, err
 	}
 	return s, nil
 }
 
-func (c *Client) RandomShow(ctx context.Context) (ShowResponse, error) {
+func (c *Client) RandomShow(ctx context.Context) (*ShowResponse, error) {
 	url := fmt.Sprintf("%s/%s", baseApiUrl, "random-show")
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return ShowResponse{}, fmt.Errorf("RandomShow: %w", err)
+		return nil, err
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return ShowResponse{}, fmt.Errorf("RandomShow: %w", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	var s ShowResponse
-	err = json.NewDecoder(resp.Body).Decode(&s)
+	s := &ShowResponse{}
+	err = json.NewDecoder(resp.Body).Decode(s)
 	if err != nil {
-		return s, fmt.Errorf("RandomShow: %w", err)
+		return nil, err
 	}
 	return s, nil
 }
 
-func (c *Client) LastPlayed(ctx context.Context, title string, count int) (LastPlayed, error) {
+func (c *Client) LastPlayed(ctx context.Context, title string, count int) (*LastPlayed, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
-		return LastPlayed{}, fmt.Errorf("LastPlayed: %w", err)
+		return nil, err
 	}
-	lastPlayed := LastPlayed{
+	lastPlayed := &LastPlayed{
 		Title: song.Data.Title,
 		URL:   song.Data.URL(),
 	}
@@ -239,7 +239,7 @@ func (c *Client) LastPlayed(ctx context.Context, title string, count int) (LastP
 		track := tracks[i]
 		show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
 		if err != nil {
-			return lastPlayed, err
+			return nil, err
 		}
 		lastPlayed.Shows = append(lastPlayed.Shows, show.Data)
 	}
@@ -247,26 +247,26 @@ func (c *Client) LastPlayed(ctx context.Context, title string, count int) (LastP
 	return lastPlayed, nil
 }
 
-func (c *Client) SongByTitle(ctx context.Context, title string) (SongResponse, error) {
+func (c *Client) SongByTitle(ctx context.Context, title string) (*SongResponse, error) {
 	slug := slugify(title)
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "songs", slug)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return SongResponse{}, fmt.Errorf("SongByTitle: %v: %w", title, err)
+		return nil, err
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return SongResponse{}, fmt.Errorf("SongByTitle: %v: %w", title, err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	var s SongResponse
+	s := &SongResponse{}
 	err = json.NewDecoder(resp.Body).Decode(&s)
 	if err != nil {
-		return s, fmt.Errorf("SongByTitle: %v: %w", title, err)
+		return nil, err
 	}
 	if !s.Success {
 		return s, fmt.Errorf("SongByTitle not found: %v", title)
@@ -275,13 +275,13 @@ func (c *Client) SongByTitle(ctx context.Context, title string) (SongResponse, e
 	return s, nil
 }
 
-func (c *Client) Longest(ctx context.Context, title string, count int) (Longest, error) {
+func (c *Client) Longest(ctx context.Context, title string, count int) (*Longest, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
-		return Longest{}, fmt.Errorf("Longest: %v: %w", title, err)
+		return nil, fmt.Errorf("Longest: %v: %w", title, err)
 	}
 
-	longest := Longest{
+	longest := &Longest{
 		Title: song.Data.Title,
 	}
 	tracks := song.Data.Tracks
@@ -297,7 +297,7 @@ func (c *Client) Longest(ctx context.Context, title string, count int) (Longest,
 
 		show, err := c.ShowOnDate(ctx, track.ShowDate.Time)
 		if err != nil {
-			return longest, fmt.Errorf("Longest: %v: %w", title, err)
+			return longest, err
 		}
 
 		longestTrack.Show = show.Data
