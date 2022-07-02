@@ -15,14 +15,14 @@ const baseURL = "https://phish.in"
 
 type Client struct {
 	token string
-	http  http.Client
+	http  *http.Client
 }
 
-func New(token string) Client {
+func New(token string) *Client {
 	client := http.Client{
 		Timeout: time.Second * 5,
 	}
-	return Client{token: token, http: client}
+	return &Client{token: token, http: &client}
 }
 
 type Venue struct {
@@ -162,7 +162,7 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowResponse, error) {
+func (c *Client) ShowOnDate(ctx context.Context, t time.Time) (ShowResponse, error) {
 	date := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "show-on-date", date)
 
@@ -186,7 +186,7 @@ func (c Client) ShowOnDate(ctx context.Context, t time.Time) (ShowResponse, erro
 	return s, nil
 }
 
-func (c Client) RandomShow(ctx context.Context) (ShowResponse, error) {
+func (c *Client) RandomShow(ctx context.Context) (ShowResponse, error) {
 	url := fmt.Sprintf("%s/%s", baseApiUrl, "random-show")
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -209,7 +209,7 @@ func (c Client) RandomShow(ctx context.Context) (ShowResponse, error) {
 	return s, nil
 }
 
-func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPlayed, error) {
+func (c *Client) LastPlayed(ctx context.Context, title string, count int) (LastPlayed, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
 		return LastPlayed{}, fmt.Errorf("LastPlayed: %w", err)
@@ -247,7 +247,7 @@ func (c Client) LastPlayed(ctx context.Context, title string, count int) (LastPl
 	return lastPlayed, nil
 }
 
-func (c Client) SongByTitle(ctx context.Context, title string) (SongResponse, error) {
+func (c *Client) SongByTitle(ctx context.Context, title string) (SongResponse, error) {
 	slug := slugify(title)
 	url := fmt.Sprintf("%s/%s/%s", baseApiUrl, "songs", slug)
 
@@ -275,7 +275,7 @@ func (c Client) SongByTitle(ctx context.Context, title string) (SongResponse, er
 	return s, nil
 }
 
-func (c Client) Longest(ctx context.Context, title string, count int) (Longest, error) {
+func (c *Client) Longest(ctx context.Context, title string, count int) (Longest, error) {
 	song, err := c.SongByTitle(ctx, title)
 	if err != nil {
 		return Longest{}, fmt.Errorf("Longest: %v: %w", title, err)
