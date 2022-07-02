@@ -10,6 +10,8 @@ import (
 	"syscall"
 	"time"
 
+	_ "time/tzdata" // embed tzdata in binary
+
 	"github.com/araddon/dateparse"
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -20,6 +22,16 @@ func main() {
 	godotenv.Load()
 	discordToken := getEnv("DISCORD_TOKEN")
 	phishinToken := getEnv("PHISHIN_TOKEN")
+	timezone := os.Getenv("TZ")
+
+	if len(timezone) <= 0 {
+		timezone = "America/Los_Angeles"
+	}
+	loc, err := time.LoadLocation(timezone)
+	if err != nil {
+		panic(err.Error())
+	}
+	time.Local = loc
 
 	dg, err := discordgo.New("Bot " + discordToken)
 	if err != nil {
@@ -103,6 +115,14 @@ func main() {
 				return
 			}
 			s.ChannelMessageSendEmbed(m.ChannelID, &embed)
+		case DaysUntilCommand:
+			date, ok := args.(time.Time)
+			if !ok {
+				return
+			}
+			message := daysUntil(time.Now(), date)
+
+			s.ChannelMessageSend(m.ChannelID, message)
 		}
 	}
 
@@ -133,6 +153,7 @@ const (
 	LastPlayedCommand
 	RandomCommand
 	LongestCommand
+	DaysUntilCommand
 	UnknownCommand
 )
 
@@ -149,7 +170,7 @@ func getEnv(key string) string {
 }
 
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(setlist|random|lastplayed|longest)(.*)$`)
+	r := regexp.MustCompile(`\.(setlist|random|lastplayed|longest|daysuntil)(.*)$`)
 	match := r.FindStringSubmatch(s)
 
 	if len(match) == 0 {
@@ -169,6 +190,12 @@ func parseCommand(s string) (Command, interface{}, error) {
 		return LastPlayedCommand, strings.TrimSpace(match[2]), nil
 	case "longest":
 		return LongestCommand, strings.TrimSpace(match[2]), nil
+	case "daysuntil":
+		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
+		if err != nil {
+			return UnknownCommand, nil, err
+		}
+		return DaysUntilCommand, t, nil
 	}
 
 	return UnknownCommand, nil, nil

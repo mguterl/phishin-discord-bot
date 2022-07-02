@@ -100,3 +100,17 @@ func embedForLongestTracks(longest *phishin.LongestTracksResponse) (discordgo.Me
 		},
 	}, nil
 }
+
+func daysUntil(now, then time.Time) string {
+	difference := then.Sub(now)
+	days := int64(math.Ceil(difference.Hours() / 24))
+
+	if days < 0 {
+		return ""
+	} else if days == 1 {
+		return fmt.Sprintf("%d day", days)
+	} else if days == 46 {
+		return "46 days and the coal ran out"
+	}
+	return fmt.Sprintf("%d days", days)
+}

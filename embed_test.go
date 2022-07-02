@@ -137,3 +137,12 @@ https://phish.in/and-so-to-bed
 		},
 	}, embed)
 }
+
+func TestDaysUntil(t *testing.T) {
+	assert.Equal(t, "1 day", daysUntil(date(2022, 6, 28), date(2022, 6, 29)))
+	assert.Equal(t, "2 days", daysUntil(date(2022, 6, 28), date(2022, 6, 30)))
+	assert.Equal(t, "", daysUntil(date(2022, 6, 30), date(2022, 6, 28)))
+	assert.Equal(t, "46 days and the coal ran out", daysUntil(date(2022, 6, 28), date(2022, 8, 13)))
+	// middle of the day
+	assert.Equal(t, "1 day", daysUntil(time.Date(2022, 6, 28, 12, 0, 0, 0, time.UTC), date(2022, 6, 29)))
+}
