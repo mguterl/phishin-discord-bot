@@ -191,13 +191,13 @@ func duration(millis int) time.Duration {
 func (c *Client) get(ctx context.Context, url string, v interface{}) error {
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		return nil
+		return err
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	if v != nil {
