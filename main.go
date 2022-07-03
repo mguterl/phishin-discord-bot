@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"math"
 	"os"
 	"os/signal"
 	"regexp"
@@ -16,12 +17,14 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 	"github.com/mguterl/phishin-discord-bot/phishin"
+	"github.com/mguterl/phishin-discord-bot/phishnet"
 )
 
 func main() {
 	godotenv.Load()
 	discordToken := getEnv("DISCORD_TOKEN")
 	phishinToken := getEnv("PHISHIN_TOKEN")
+	phishNetToken := getEnv("PHISHNET_TOKEN")
 	timezone := os.Getenv("TZ")
 
 	if len(timezone) <= 0 {
@@ -32,6 +35,13 @@ func main() {
 		panic(err.Error())
 	}
 	time.Local = loc
+
+	p := phishnet.New(phishNetToken)
+	shows, err := p.Shows(context.Background())
+	if err != nil {
+		fmt.Println("error fetching shows,", err)
+		return
+	}
 
 	dg, err := discordgo.New("Bot " + discordToken)
 	if err != nil {
@@ -123,6 +133,24 @@ func main() {
 			message := daysUntil(time.Now(), date)
 
 			s.ChannelMessageSend(m.ChannelID, message)
+		case NextShowCommand:
+			now := time.Now()
+			show := phishnet.NextShow(shows.Shows, now)
+			if show == nil {
+				return
+			}
+
+			difference := show.Date.Sub(now)
+			days := int64(math.Ceil(difference.Hours() / 24))
+			var message string
+
+			if show == nil {
+				message = "No upcoming shows"
+			} else {
+				message = fmt.Sprintf("%d days until %s at the %s in %s, %s", days, formatDayOfWeek(phishin.Date(show.Date)), show.Venue, show.City, show.State)
+			}
+
+			s.ChannelMessageSend(m.ChannelID, message)
 		}
 	}
 
@@ -154,6 +182,7 @@ const (
 	RandomCommand
 	LongestCommand
 	DaysUntilCommand
+	NextShowCommand
 	UnknownCommand
 )
 
@@ -170,7 +199,7 @@ func getEnv(key string) string {
 }
 
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(setlist|random|lastplayed|longest|daysuntil)(.*)$`)
+	r := regexp.MustCompile(`\.(setlist|random|lastplayed|longest|daysuntil|nextshow)(.*)$`)
 	match := r.FindStringSubmatch(s)
 
 	if len(match) == 0 {
@@ -186,6 +215,8 @@ func parseCommand(s string) (Command, interface{}, error) {
 		return SetlistCommand, t, nil
 	case "random":
 		return RandomCommand, nil, nil
+	case "nextshow":
+		return NextShowCommand, nil, nil
 	case "lastplayed":
 		return LastPlayedCommand, strings.TrimSpace(match[2]), nil
 	case "longest":
