@@ -136,17 +136,13 @@ func main() {
 		case NextShowCommand:
 			now := time.Now()
 			show := phishnet.NextShow(shows.Shows, now)
-			if show == nil {
-				return
-			}
-
-			difference := show.Date.Sub(now)
-			days := int64(math.Ceil(difference.Hours() / 24))
 			var message string
 
 			if show == nil {
 				message = "No upcoming shows"
 			} else {
+				difference := show.Date.Sub(now)
+				days := int64(math.Ceil(difference.Hours() / 24))
 				message = fmt.Sprintf("%d days until %s at the %s in %s, %s", days, formatDayOfWeek(phishin.Date(show.Date)), show.Venue, show.City, show.State)
 			}
 
