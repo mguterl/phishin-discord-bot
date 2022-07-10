@@ -198,18 +198,16 @@ func getEnv(key string) string {
 	return val
 }
 
+var commandRegexp = regexp.MustCompile(`\.(\w+)(.*)$`)
+
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(\w+)(.*)$`)
-	match := r.FindStringSubmatch(s)
+	match := commandRegexp.FindStringSubmatch(s)
 
 	if len(match) == 0 {
 		return UnknownCommand, nil, nil
 	}
 
 	switch match[1] {
-	case "setlist":
-		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
-		return SetlistCommand, t, err
 	case "random":
 		return RandomCommand, nil, nil
 	case "nextshow":
@@ -218,6 +216,9 @@ func parseCommand(s string) (Command, interface{}, error) {
 		return LastPlayedCommand, strings.TrimSpace(match[2]), nil
 	case "longest":
 		return LongestCommand, strings.TrimSpace(match[2]), nil
+	case "setlist":
+		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
+		return SetlistCommand, t, err
 	case "daysuntil":
 		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
 		return DaysUntilCommand, t, err
