@@ -199,7 +199,7 @@ func getEnv(key string) string {
 }
 
 func parseCommand(s string) (Command, interface{}, error) {
-	r := regexp.MustCompile(`\.(setlist|random|lastplayed|longest|daysuntil|nextshow)(.*)$`)
+	r := regexp.MustCompile(`\.(\w+)(.*)$`)
 	match := r.FindStringSubmatch(s)
 
 	if len(match) == 0 {
