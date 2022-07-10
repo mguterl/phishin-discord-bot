@@ -21,6 +21,12 @@ func TestParseSetlistCommand(t *testing.T) {
 	assert.Equal(t, date(2021, 8, 31), d)
 }
 
+func TestParseSetlistCommandError(t *testing.T) {
+	command, _, err := parseCommand(".setlist notadate")
+	assert.Error(t, err)
+	assert.Equal(t, SetlistCommand, command)
+}
+
 func TestParseRandomCommand(t *testing.T) {
 	command, _, err := parseCommand(".random")
 	require.NoError(t, err)

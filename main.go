@@ -209,10 +209,7 @@ func parseCommand(s string) (Command, interface{}, error) {
 	switch match[1] {
 	case "setlist":
 		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
-		if err != nil {
-			return SetlistCommand, nil, err
-		}
-		return SetlistCommand, t, nil
+		return SetlistCommand, t, err
 	case "random":
 		return RandomCommand, nil, nil
 	case "nextshow":
@@ -223,10 +220,7 @@ func parseCommand(s string) (Command, interface{}, error) {
 		return LongestCommand, strings.TrimSpace(match[2]), nil
 	case "daysuntil":
 		t, err := dateparse.ParseAny(strings.TrimSpace(match[2]))
-		if err != nil {
-			return DaysUntilCommand, nil, err
-		}
-		return DaysUntilCommand, t, nil
+		return DaysUntilCommand, t, err
 	}
 
 	return UnknownCommand, nil, nil
