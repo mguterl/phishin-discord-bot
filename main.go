@@ -104,7 +104,7 @@ func main() {
 				return
 			}
 
-			embed, err := embedForLastPlayedTracks(lastPlayed)
+			embed, err := embedForLastPlayedTracks(lastPlayed, time.Now())
 			if err != nil {
 				return
 			}

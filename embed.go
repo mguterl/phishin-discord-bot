@@ -52,24 +52,24 @@ func embedForSetlist(setlist *Setlist) (discordgo.MessageEmbed, error) {
 	}, nil
 }
 
-func embedForLastPlayedTracks(lastPlayed *phishin.LastPlayedTracksResponse) (discordgo.MessageEmbed, error) {
+func embedForLastPlayedTracks(lastPlayed *phishin.LastPlayedTracksResponse, now time.Time) (discordgo.MessageEmbed, error) {
 	var d bytes.Buffer
 	last, rest := lastPlayed.Shows[len(lastPlayed.Shows)-1], lastPlayed.Shows[:len(lastPlayed.Shows)-1]
 
-	d.WriteString(fmt.Sprintf("It was played at %s in %s\n", last.Venue.Name, last.Venue.Location))
+	d.WriteString(fmt.Sprintf("🌵 [%s at %s in %s](%s)\n", formatDayOfWeek(last.Date), last.Venue.Name, last.Venue.Location, phishin.ShowURL(last.Date)))
 
 	if len(rest) > 0 {
 		d.WriteString("\nNext most recent plays 🌸:\n")
 		for i := len(rest) - 1; i >= 0; i-- {
 			show := rest[i]
-			d.WriteString(fmt.Sprintf("🌵 %s at %s in %s\n", formatDayOfWeek(show.Date), show.Venue.Name, show.Venue.Location))
+			d.WriteString(fmt.Sprintf("🌵 [%s at %s in %s](%s)\n", formatDayOfWeek(show.Date), show.Venue.Name, show.Venue.Location, phishin.ShowURL(show.Date)))
 		}
 	}
 	d.WriteString(fmt.Sprintf("\n%s\n", lastPlayed.URL))
 
 	return discordgo.MessageEmbed{
 		Color:       green,
-		Title:       fmt.Sprintf("%s was last played on %s", lastPlayed.Title, formatDayOfWeek(last.Date)),
+		Title:       fmt.Sprintf("%s was last played %d days ago", lastPlayed.Title, daysAgo(now, last.Date.Time)),
 		Description: d.String(),
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: fmt.Sprintf("Total play count: %d", lastPlayed.PlayCount),
@@ -88,7 +88,7 @@ func embedForLongestTracks(longest *phishin.LongestTracksResponse) (discordgo.Me
 
 	var d bytes.Buffer
 	for _, track := range longest.Tracks {
-		d.WriteString(fmt.Sprintf("%s on %s 🐟🐟🐟 @ %s in %s\n\n", formatDuration(track.Duration), formatDayOfWeek(track.Show.Date), track.Show.Venue.Name, track.Show.Venue.Location))
+		d.WriteString(fmt.Sprintf("🐟 %s on [%s at %s in %s](%s)\n\n", formatDuration(track.Duration), formatDayOfWeek(track.Show.Date), track.Show.Venue.Name, track.Show.Venue.Location, phishin.ShowURL(track.Show.Date)))
 	}
 
 	return discordgo.MessageEmbed{
@@ -103,7 +103,7 @@ func embedForLongestTracks(longest *phishin.LongestTracksResponse) (discordgo.Me
 
 func daysUntil(now, then time.Time) string {
 	difference := then.Sub(now)
-	days := int64(math.Ceil(difference.Hours() / 24))
+	days := int(math.Ceil(difference.Hours() / 24))
 
 	if days < 0 {
 		return ""
@@ -113,4 +113,9 @@ func daysUntil(now, then time.Time) string {
 		return "46 days and the coal ran out"
 	}
 	return fmt.Sprintf("%d days", days)
+}
+
+func daysAgo(now, then time.Time) int {
+	difference := now.Sub(then)
+	return int(math.Floor(difference.Hours() / 24))
 }

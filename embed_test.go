@@ -16,6 +16,12 @@ func parseDuration(t *testing.T, s string) time.Duration {
 	return duration
 }
 
+func parseDate(t *testing.T, s string) time.Time {
+	d, err := time.Parse("2006-01-02", s)
+	require.NoError(t, err)
+	return d
+}
+
 func TestSetlistEmbed(t *testing.T) {
 	setlist := &Setlist{
 		Date:     phishin.DateFromString("2021-08-31"),
@@ -91,16 +97,16 @@ func TestLastPlayedEmbed(t *testing.T) {
 			},
 		},
 	}
-	embed, err := embedForLastPlayedTracks(lastPlayed)
+	embed, err := embedForLastPlayedTracks(lastPlayed, parseDate(t, "1998-01-01"))
 	require.NoError(t, err)
 	assert.Equal(t, discordgo.MessageEmbed{
 		Color: green,
-		Title: "Black-Eyed Katy was last played on Tuesday, December 30, 1997",
-		Description: `It was played at Madison Square Garden in New York, NY
+		Title: "Black-Eyed Katy was last played 2 days ago",
+		Description: `🌵 [Tuesday, December 30, 1997 at Madison Square Garden in New York, NY](https://phish.in/1997-12-30)
 
 Next most recent plays 🌸:
-🌵 Friday, December 5, 1997 at CSU Convocation Center in Cleveland, OH
-🌵 Friday, November 28, 1997 at The Centrum in Worcester, MA
+🌵 [Friday, December 5, 1997 at CSU Convocation Center in Cleveland, OH](https://phish.in/1997-12-05)
+🌵 [Friday, November 28, 1997 at The Centrum in Worcester, MA](https://phish.in/1997-11-28)
 
 https://phish.in/black-eyed-katy
 `,
@@ -124,12 +130,12 @@ func TestLastPlayedEmbedWithOnePlay(t *testing.T) {
 			},
 		},
 	}
-	embed, err := embedForLastPlayedTracks(lastPlayed)
+	embed, err := embedForLastPlayedTracks(lastPlayed, parseDate(t, "2021-11-01"))
 	require.NoError(t, err)
 	assert.Equal(t, discordgo.MessageEmbed{
 		Color: green,
-		Title: "And So To Bed was last played on Friday, October 15, 2021",
-		Description: `It was played at Golden 1 Center in Sacramento, CA
+		Title: "And So To Bed was last played 17 days ago",
+		Description: `🌵 [Friday, October 15, 2021 at Golden 1 Center in Sacramento, CA](https://phish.in/2021-10-15)
 
 https://phish.in/and-so-to-bed
 `, Footer: &discordgo.MessageEmbedFooter{
